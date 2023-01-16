@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta
+
+[project]
+name = "body_matrix_doviethoang"
+version = "0.0.1"
+authors = [
+  { name="Hoang Do", email="hoang.do.2102@gmail.com" },
+]
+description = "Package to Calculate Human Body Measurements"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/akando42/body_matrix"
+"Bug Tracker" = "https://github.com/akando42/body_matrix/issues"
