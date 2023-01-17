@@ -1,11 +1,11 @@
-# Body Matrix Measurements
-## Install Package
+## Human Body Measurement via Video and Image
+### Install Package
 ```
 $ pip install body-matrix
 
 ```
 
-## Package Usage
+### Package Usage
 Load Segmentation Model
 
 ```
