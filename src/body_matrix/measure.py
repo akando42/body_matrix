@@ -12,8 +12,8 @@ def box_center_coordinate(bbox):
 def two_boxes_distance(bbox1, bbox2):
     print(bbox1)
     print(bbox2)
-    bbox1_center = center(bbox1)
-    bbox2_center = center(bbox2)
+    bbox1_center = box_center_coordinate(bbox1)
+    bbox2_center = box_center_coordinate(bbox2)
     x_dif = bbox1_center[0] - bbox2_center[0]
     y_dif = bbox1_center[1] - bbox2_center[1]
     
@@ -24,8 +24,8 @@ def two_boxes_distance(bbox1, bbox2):
 def distance_from_vertical_line(pic, bbox):
     pic_width = pic.width
     pic_height = pic.height
-    pic_center = center([0,0, pic_width, pic_height])
-    bbox_center = center(bbox)
+    pic_center = box_center_coordinate([0,0, pic_width, pic_height])
+    bbox_center = box_center_coordinate(bbox)
     dfv = abs(bbox_center[0] - pic_center[0])
     x_dif = bbox_center[0] - pic_center[0]
     y_dif = bbox_center[1] - pic_center[1]
@@ -41,8 +41,8 @@ def box_distance_from_center(pic, bbox):
     pic_width = pic.width
     pic_height = pic.height
     
-    pic_center = center([0,0, pic_width, pic_height])
-    bbox_center = center(bbox)
+    pic_center = box_center_coordinate([0,0, pic_width, pic_height])
+    bbox_center = box_center_coordinate(bbox)
     
     x_dif = bbox_center[0] - pic_center[0]
     y_dif = bbox_center[1] - pic_center[1]
@@ -66,5 +66,5 @@ def find_middle_point(pointA, pointB):
     return middleX, middleY 
 
 # Box_Distance_From_Horizontal_Line - TO BE DONE
-# Find_Border_Length - TO be DONE
-# Find_Polygon_Area - TO be DONE
+# Find_Border_Length - TO BE DONE
+# Find_Polygon_Area - TO BE DONE

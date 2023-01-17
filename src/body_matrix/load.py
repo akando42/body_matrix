@@ -7,7 +7,7 @@ from torchvision.io import read_video
 from torchvision.transforms.functional import to_pil_image
 
 ### Load Human Segmentation Model
-def segmentation_model(device):
+def segment_model(device):
 	segment_weights = MaskRCNN_ResNet50_FPN_V2_Weights.COCO_V1
 	segment_model = maskrcnn_resnet50_fpn_v2(weights=segment_weights)
 	segment_transforms = segment_weights.transforms()

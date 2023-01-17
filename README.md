@@ -34,7 +34,7 @@ keypoints_model, keypoints_transforms = load.segmentation_model("cuda")
 Load Video
 ```
 from body_matrix import load
-video, frames_counts, fps, smaple_frame = load.video("/Users/troydo42/Desktop/dt.mov", 90, 1)
+video, frames_counts, fps, sample_frame = load.video("/Users/troydo42/Desktop/dt.mov", 90, 1)
 print(frames_counts)
 ```
 
