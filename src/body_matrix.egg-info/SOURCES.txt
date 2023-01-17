@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+src/body_matrix/__init__.py
+src/body_matrix/inference.py
+src/body_matrix/load.py
+src/body_matrix.egg-info/PKG-INFO
+src/body_matrix.egg-info/SOURCES.txt
+src/body_matrix.egg-info/dependency_links.txt
+src/body_matrix.egg-info/top_level.txt

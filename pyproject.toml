@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta
+requires = ["setuptools>=61.0", "av>=8.0", "torchvision>=0.13"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "body_matrix_doviethoang"
-version = "0.0.1"
+name = "body_matrix"
+version = "0.0.2"
 authors = [
   { name="Hoang Do", email="hoang.do.2102@gmail.com" },
 ]
@@ -16,6 +16,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
 
 [project.urls]
 "Homepage" = "https://github.com/akando42/body_matrix"
