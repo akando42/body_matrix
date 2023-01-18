@@ -53,7 +53,7 @@ from body_matrix import load
 keypoints_model, keypoints_transform = load.keypoints_model("cpu")
 video, frame_counts, fps, sample_frame = load.video("04_01.mp4", -90, 1)
 
-box, keypoint = infer.detect_main_target(
+selected_box, keypoint = infer.detect_main_target(
     sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
 )
 ```
@@ -102,7 +102,40 @@ selected_kps = process.keypoints_filter(
 print(selected_kps[nose])
 
 ```
-Human_Segmentation_Positions
+Human_Segmentation_Area
+
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+
+video, frame_counts, fps, sample_frame = load.video(
+    "sample02.mp4", 
+    -90, 
+    1
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+	['nose','left_shoulder','right_shoulder'], 
+	keypoints
+)
+
+segment_model, segment_transform = load.segment_model("cpu")
+mask, mask_image, bool_mask = infer.segment_selected_target(
+    sample_frame, "cpu", selected_box, 0.99, segment_model, segment_transform
+)
+
+segment_area = process.segmentation_area(
+    sample_frame, 
+    bool_mask
+)
+
+```
 Find_Segmentation_Intersection
 Find_Segmentation_Contour - TO be DONE
 Filter_Segmentation_Intersection

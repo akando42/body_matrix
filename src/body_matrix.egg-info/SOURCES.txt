@@ -3,10 +3,10 @@ README.md
 pyproject.toml
 src/body_matrix/__init__.py
 src/body_matrix/export.py
-src/body_matrix/filter.py
 src/body_matrix/infer.py
 src/body_matrix/load.py
 src/body_matrix/measure.py
+src/body_matrix/process.py
 src/body_matrix/score.py
 src/body_matrix.egg-info/PKG-INFO
 src/body_matrix.egg-info/SOURCES.txt
