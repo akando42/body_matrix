@@ -165,18 +165,40 @@ selected_kps = process.keypoints_filter(
 )
 
 output = draw.keypoint_markers(
-	coordinate=selected_kps,
-	image=sample_frame, 
-	label_font="/Users/troydo42/Desktop/Body_Matrixes/Roboto-Bold.ttf"
+    coordinates=selected_kps,
+    image=sample_frame, 
+    label_font="/path/Roboto-Bold.ttf"
 )
 
 output
+```
+
+Circle_Label
+```
+from body_matrix import draw
+
+middle_back = (309.86787033081055, 699.3268127441406)
+updated_sample = draw.circle_label(
+    image=output, 
+    central_point=middle_back,
+    radius=100,
+    background_color = "#FF0000", 
+    label = "21", 
+    label_size = 100,
+    label_font="/path/Roboto-Bold.ttf", 
+    label_color ="#FAFF00"
+)
+```
+
+Rectangle_Label
+```
 
 
 ```
-Circle_Label
-Rectangle_Label
+
 Connecting_Line
+```
+```
 
 ***Measure***
 Get_Box_Center_Coordinate

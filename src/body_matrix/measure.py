@@ -53,7 +53,7 @@ def box_distance_from_center(pic, bbox):
     return distance, area
 
 ### Two_Points_Distance
-def two_poinsts_ditance(pointA, pointB):
+def two_poinsts_distance(pointA, pointB):
     x_dif = (pointA[0] - pointB[0])
     y_dif = (pointA[1] - pointB[1])
     dif = math.sqrt(x_dif * x_dif + y_dif * y_dif)
