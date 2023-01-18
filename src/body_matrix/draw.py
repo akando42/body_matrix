@@ -54,7 +54,7 @@ def circle_label(image, radius, central_point, background_color, label, label_fo
 	return sample
 
 
-def fixed_rectangle_label(image, label_text, label_font, label_color, background_color, anchor_point):
+def fixed_rectangle_label(image, anchor_point, label_text, label_font, label_color, background_color, ):
 
 	return sample 
 
