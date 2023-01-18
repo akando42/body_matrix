@@ -66,7 +66,10 @@ def detect_main_target(frame, device, min_accuracy, kp_model, kp_transforms):
     # points_image = drawMarkers(labels, SHApoints, frame)
     return selected_bbox, selected_keypoints
 
-### Segment Selected Person from Background
+###############################################
+### Segment Selected Person from Background ###
+###############################################
+
 def segment_selected_target(frame, device, selected_bbox, segment_min_accuracy, segment_model, segment_transforms):
     ### Run Predicion Model to find Mask
     input_image = segment_transforms(frame)

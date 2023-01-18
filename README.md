@@ -5,7 +5,6 @@ $ pip install body-matrix
 ```
 
 ### Package Usage
-
 ***Load Models, Video and Image Frames***
 Load Segmentation Model to CPU
 ```
@@ -34,26 +33,75 @@ keypoints_model, keypoints_transforms = load.segmentation_model("cuda")
 Load Video
 ```
 from body_matrix import load
-video, frames_counts, fps, sample_frame = load.video("/Users/troydo42/Desktop/dt.mov", 90, 1)
+video, frames_counts, fps, sample_frame = load.video("/Desktop/dt.mov", 90, 1)
 print(frames_counts)
 ```
 
 Load Image
 ```
 from body_matrix import load
-frames_path = load.image_frames("/Users/troydo42/Desktop/instagram")
+frames_path = load.image_frames("/Desktop/instagram")
 print(frames_path)
 ```
 
 ***Infer***
-Detect_Human_Keypoints - TO be DONE
-Segment_Human_Body - TO be DONE
 Detect_Main_Target
-Segment_Selected_Target
+```
+from body_matrix import infer
+from body_matrix import load
 
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+video, frame_counts, fps, sample_frame = load.video("04_01.mp4", -90, 1)
+
+box, keypoint = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+```
+
+Segment_Selected_Target
+```
+from body_matrix import infer
+from body_matrix import load
+
+segment_model, segment_transform = load.segment_model("cpu")
+video, frame_counts, fps, sample_frame = load.video("04_01.mp4", -90, 1)
+
+selected_box, keypoint = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+mask, mask_image, bool_mask = infer.segment_selected_target(
+    sample_frame, "cpu", selected_box, 0.99, segment_model, segment_transform
+)
+```
 
 ***Filter***
 Keypoints_Filter
+
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+
+video, frame_counts, fps, sample_frame = load.video(
+    "sample02.mp4", 
+    -90, 
+    1
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+boxes, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+	['nose','left_shoulder','right_shoulder'], 
+	keypoints
+)
+
+print(selected_kps[nose])
+
+```
 Human_Segmentation_Positions
 Find_Segmentation_Intersection
 Find_Segmentation_Contour - TO be DONE
