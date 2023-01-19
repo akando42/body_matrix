@@ -194,20 +194,140 @@ updated_sample = draw.circle_label(
 Rectangle_Label
 ```
 from body_matrix import draw
+from body_matrix import load
 
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/TorchVision/INFER_VIDS/Nov30/00_01.mp4", 
+    -90, 
+    30
+)
 
+rect_sample = draw.fixed_rectangle_label(
+    image=sample_frame, 
+    anchor_point=[sample_frame.width/2, 100], 
+    label_text="Lottee Mart",
+    label_size=30, 
+    label_font="/Users/troydo42/Desktop/Body_Matrixes/Roboto-Bold.ttf", 
+    label_color ="#FFFFFF",
+    background_color = "#11114A"
+)
 
+rect_sample
 ```
 
 Connecting_Line
+
 ```
+from body_matrix import draw
+from body_matrix import load
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/TorchVision/INFER_VIDS/Nov30/00_01.mp4", 
+    -90, 
+    30
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+boxes, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+    [
+        'left_shoulder','right_shoulder',
+        'left_hip','right_hip', 
+        'left_wrist','right_wrist',
+        'left_ankle', 'right_ankle'
+    ], 
+    keypoints
+)
+
+new_sample = draw.connecting_line(
+    image=rect_sample, 
+    pointA=selected_kps['right_shoulder'],
+    pointB=selected_kps['left_hip'],
+    line_color="white", 
+    line_width=12
+)
+
+new_sample
+
+```
+Floating Label
+```
+from body_matrix import load
+from body_matrix import measure 
+from body_matrix import draw
+from body_matrix import infer
+from body_matrix import process
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/TorchVision/INFER_VIDS/Nov30/00_01.mp4", 
+    -90, 
+    30
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+boxes, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+    [
+        'left_shoulder','right_shoulder',
+        'left_hip','right_hip', 
+        'left_wrist','right_wrist',
+        'left_ankle', 'right_ankle'
+    ], 
+    keypoints
+)
+
+middle_hip = measure.find_middle_point(
+    selected_kps['left_hip'], 
+    selected_kps['right_hip']
+)
+
+middle_shoulder = measure.find_middle_point(
+    selected_kps['left_shoulder'], 
+    selected_kps['right_shoulder']
+)
+
+middle_back = measure.find_middle_point(
+    middle_shoulder, 
+    middle_hip
+)
+
+float_sample = sample_frame
+for key, value in selected_kps.items():
+    print(key, value)
+    float_sample = draw.floating_rectangle_label(
+        image=float_sample, 
+        longitude_coordinate=middle_back[0],
+        point=value, 
+        label_text=key, 
+        label_size=16, 
+        label_color="#ffffff", 
+        label_font="/Users/troydo42/Desktop/Body_Matrixes/Roboto-Bold.ttf",
+        background_color="#11114A"
+    )    
+
+float_sample
 ```
 
 #### Measure
 Get_Box_Center_Coordinate
+```
+```
 Two_Boxes_Distance
+```
+```
 Box_Distance_From_Vertical_Line
+```
+```
+
 Box_Distance_From_Horizontal_Line
+```
+```
 Box_Distance_From_Center
 Two_Points_Distance
 Find_Middle_Point

@@ -2,6 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 src/body_matrix/__init__.py
+src/body_matrix/draw.py
 src/body_matrix/export.py
 src/body_matrix/infer.py
 src/body_matrix/load.py
