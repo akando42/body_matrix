@@ -72,6 +72,7 @@ def fixed_rectangle_label(image, anchor_point, label_text, label_size, label_fon
 	)
 
 	draw = ImageDraw.Draw(sample)
+
 	draw.rectangle(
 		[rect_topleft, rect_bottomright], 
 		fill=background_color, 
@@ -90,8 +91,16 @@ def fixed_rectangle_label(image, anchor_point, label_text, label_size, label_fon
 	return sample 
 
 
-def connecting_line():
-	return
+def connecting_line(image, pointA, pointB, line_color, line_width):
+	sample = image.copy()
+	draw = ImageDraw.Draw(sample)
+	draw.line(
+		[pointA[0], pointA[1],  pointB[0], pointB[1]], 
+		fill=line_color, 
+		width=line_width
+	)
+
+	return sample
 
 def floating_rectangle_label():
 	return
