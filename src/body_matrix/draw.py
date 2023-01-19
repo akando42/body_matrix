@@ -54,7 +54,38 @@ def circle_label(image, radius, central_point, background_color, label, label_fo
 	return sample
 
 
-def fixed_rectangle_label(image, anchor_point, label_text, label_font, label_color, background_color, ):
+def fixed_rectangle_label(image, anchor_point, label_text, label_size, label_font, label_color, background_color):
+	letter_count = len(label_text)
+	label_height = label_size * 2
+	label_width = label_size * letter_count
+	marker_font = ImageFont.truetype(label_font, label_size)
+	sample = image.copy()
+
+	rect_topleft = (
+		(anchor_point[0] - label_width/2), 
+		(anchor_point[1] - label_height/2)
+	)
+
+	rect_bottomright = (
+		(anchor_point[0] + label_width/2), 
+		(anchor_point[1] + label_height/2)
+	)
+
+	draw = ImageDraw.Draw(sample)
+	draw.rectangle(
+		[rect_topleft, rect_bottomright], 
+		fill=background_color, 
+		outline=label_color, 
+		width=1
+	)
+
+	draw.text(
+		(anchor_point[0] - label_width/4, anchor_point[1]-label_height/4),
+		str(label_text),
+		fill=label_color,
+		font=marker_font,
+		align="ms"
+	)
 
 	return sample 
 

@@ -5,7 +5,8 @@ $ pip install body-matrix
 ```
 
 ### Package Usage
-***Load Models, Video and Image Frames***
+#### Load Models, Video and Image Frames***
+
 Load Segmentation Model to CPU
 ```
 from body_matrix import load
@@ -44,7 +45,7 @@ frames_path = load.image_frames("/Desktop/instagram")
 print(frames_path)
 ```
 
-***Infer***
+#### Infer
 Detect_Main_Target
 ```
 from body_matrix import infer
@@ -75,7 +76,7 @@ mask, mask_image, bool_mask = infer.segment_selected_target(
 )
 ```
 
-***Filter***
+#### Filter
 Keypoints_Filter
 
 ```
@@ -140,7 +141,7 @@ Find_Segmentation_Intersection - TO be DONE
 Find_Segmentation_Contour - TO be DONE
 Filter_Segmentation_Intersection - TO be DONE
 
-***Draw***
+#### Draw
 Keypoint_Markers
 ```
 from body_matrix import load
@@ -192,6 +193,8 @@ updated_sample = draw.circle_label(
 
 Rectangle_Label
 ```
+from body_matrix import draw
+
 
 
 ```
@@ -200,7 +203,7 @@ Connecting_Line
 ```
 ```
 
-***Measure***
+#### Measure
 Get_Box_Center_Coordinate
 Two_Boxes_Distance
 Box_Distance_From_Vertical_Line
@@ -211,12 +214,12 @@ Find_Middle_Point
 Find_Border_Length - TO be DONE
 Find_Polygon_Area - TO be DONE
 
-***Score***
+#### Score
 Find_Nearest_Value
 Find_Largest_Value
 Find_Best_Score
 
-***Export***
+#### Export
 Generate_Video_From_Images
 Generate_Seeking_Video_From_Images
 Generate_Instagram_Video_From_Images
