@@ -5,8 +5,25 @@ from torchvision.transforms.functional import to_pil_image, pil_to_tensor
 from . import measure
 from . import score
 
-def initiate(message):
-    print(message)
+##########################################################
+### Detect all Humans in Frames with High Probability ####
+##########################################################
+def detect_targets(frame, device, min_accuracy, kp_model, kp_transforms):
+
+    ### Make Predictions on Frame
+    body_matrix = kp_transforms(frame)
+    predictions = kp_model([body_matrix.to(device)])
+
+    ### Extract Boxes, Scores and Keypoints from frame
+    boxes = predictions[0]['boxes']
+    keypoints = predictions[0]['keypoints']
+    scores = predictions[0]['scores']
+
+    ### Filter for the main Bounding Box and Keypoints
+    idx = torch.where(scores > min_accuracy)
+    main_boxes = torch.squeeze(boxes[idx], dim=0)
+
+    return main_boxes
 
 ###################################
 ### Detect Main Person in Frame ###
@@ -60,7 +77,7 @@ def detect_main_target(frame, device, min_accuracy, kp_model, kp_transforms):
     
     print("Select keypoint index", focus_index)
     selected_bbox = bboxes[focus_index] 
-    selected_keypoints = torch.unsqueeze(keypoints[idx][focus_index], dim=0)
+    selected_keypoints = torch.squeeze(keypoints[idx][focus_index], dim=0)
     # SHApoints = getSHAPositions(kp)
     # labels = ["ls","rs","lw", "rw", "lh","rh","la","ra"]
     # points_image = drawMarkers(labels, SHApoints, frame)
@@ -69,7 +86,6 @@ def detect_main_target(frame, device, min_accuracy, kp_model, kp_transforms):
 ###############################################
 ### Segment Selected Person from Background ###
 ###############################################
-
 def segment_selected_target(frame, device, selected_bbox, segment_min_accuracy, segment_model, segment_transforms):
     ### Run Predicion Model to find Mask
     input_image = segment_transforms(frame)

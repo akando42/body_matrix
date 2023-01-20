@@ -315,28 +315,214 @@ float_sample
 ```
 
 #### Measure
-Get_Box_Center_Coordinate
+Box_Center_Coordinate
 ```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure 
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Body_Matrixes/samples/man_03.mp4", 
+    -90, 
+    30
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+box
 ```
+
 Two_Boxes_Distance
 ```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+from torchvision.transforms.functional import to_pil_image
+
+sample_frame_index = 30
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+box, keypoints = infer.detect_main_target(
+    frame=sample_frame, 
+    device="cpu",
+    min_accuracy=0.8,
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform 
+)
+
+next_frame = to_pil_image(video[sample_frame_index+1])
+next_frame = next_frame.rotate(-90, expand=True)
+next_box, keypoints = infer.detect_main_target(
+    frame=next_frame, 
+    device="cpu",
+    min_accuracy=0.8,
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform 
+)
+
+moved_distance = measure.two_boxes_distance(box, next_box)
+moved_distance
 ```
+
 Box_Distance_From_Vertical_Line
 ```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+from torchvision.transforms.functional import to_pil_image
+
+sample_frame_index = 30
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+box, keypoints = infer.detect_main_target(
+    frame=sample_frame, 
+    device="cpu",
+    min_accuracy=0.8,
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform 
+)
+
+distance, area = measure.distance_from_vertical_line(
+    pic=sample_frame, 
+    bbox=box
+)
+```
+
+Box_Distance_From_Center
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+
+sample_frame_index = 10
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+
+box, keypoints = infer.detect_main_target(
+    sample_frame, 
+    device="cpu", 
+    min_accuracy=0.8, 
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform
+)
+
+distance = measure.box_distance_from_center(sample_frame, box)
+
+```
+
+Two_Points_Distance
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+
+sample_frame_index = 10
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+
+box, keypoints = infer.detect_main_target(
+    sample_frame, 
+    device="cpu", 
+    min_accuracy=0.8, 
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform
+)
+
+distance = measure.two_points_distance(keypoints[0], keypoints[1])
+distance
+
+```
+
+Find_Middle_Point
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+
+sample_frame_index = 10
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+
+box, keypoints = infer.detect_main_target(
+    sample_frame, 
+    device="cpu", 
+    min_accuracy=0.8, 
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform
+)
+
+x, y = measure.find_middle_point(keypoints[0], keypoints[1])
+print(x.item(), y.item())
 ```
 
 Box_Distance_From_Horizontal_Line
 ```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import measure
+
+sample_frame_index = 10
+video, frame_counts, fps, sample_frame = load.video(
+    "/path/sample01.mp4", 
+    -90, 
+    sample_frame_index
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+
+box, keypoints = infer.detect_main_target(
+    sample_frame, 
+    device="cpu", 
+    min_accuracy=0.8, 
+    kp_model=keypoints_model, 
+    kp_transforms=keypoints_transform
+)
+
+distance = measure.box_distance_from_horizontal_line(
+    sample_frame, 
+    box
+)
+distance
 ```
-Box_Distance_From_Center
-Two_Points_Distance
-Find_Middle_Point
+
 Find_Border_Length - TO be DONE
 Find_Polygon_Area - TO be DONE
 
 #### Score
 Find_Nearest_Value
+```
+```
 Find_Largest_Value
+```
+```
 Find_Best_Score
 
 #### Export
