@@ -15,14 +15,14 @@ def keypoints_filter(selected_kpoints, detected_kpoints):
 	for index, keypoint in enumerate(coco_keypoints):
 		if keypoint in selected_kpoints:
 			kp_positions[keypoint] = [
-				detected_kpoints[0][index][0].item(), 
-				detected_kpoints[0][index][1].item()
+				detected_kpoints[index][0].item(), 
+				detected_kpoints[index][1].item()
 			] 
 			# print(kp_positions[keypoint])
 
 	return kp_positions
 
-# Human_Segmentation_Area
+# Human Segmentation Area
 def segmentation_area(sample_image, bool_mask):
 	tensor_image = pil_to_tensor(sample_image)
 	mask = torch.squeeze(bool_mask, 0)
@@ -42,8 +42,42 @@ def segmentation_area(sample_image, bool_mask):
 	return positions
 
 
-# Find_Segmentation_Intersection - TO be DONE
+# Find Shoulder Points
+def find_shoulder_points(ls, rs, segment_positions):
+	lsX = ls[0]
+	lsY = ls[1]
+	rsX = rs[0]
+	rsY = rs[1]
+	
+	alpha = (rsY - lsY)/(rsX - lsX)
+	beta = (rsX * lsY - rsY * lsX)/(rsX - lsX)
 
-# Filter_Segmentation_Intersection - TO be DONE
+	line_coordinates = []
+	for idx, position in enumerate(segment_positions):
+		expectedY = alpha * position[0] + beta
+		if position[1] == expectedY:
+			line_coordinates.append(
+				[position[0], position[1]]
+			)
 
-# Find_Segmentation_Contour - TO be DONE
+	if lsX < rsX:
+	    shoulder_kps = {
+	        'left_shoulder': line_coordinates[0],
+	        'right_shoulder': line_coordinates[-1]
+	    }
+	elif lsX > rsX:
+	    shoulder_kps = {
+	        'left_shoulder': line_coordinates[-1],
+	        'right_shoulder': line_coordinates[0]
+	    }
+	return shoulder_kps
+
+
+def find_hip_points(lh, rh, lw, rw, segment_positions):
+	return lefthip_pt, righthip_pt
+
+def find_tophead_point(le, re, ls, rs, segment_positions):
+	return tophead_pt
+
+# Find_Segmentation_Contour 
+

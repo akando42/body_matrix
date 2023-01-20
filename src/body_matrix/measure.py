@@ -80,7 +80,3 @@ def find_middle_point(pointA, pointB):
     middleX = (pointA[0] + pointB[0])/2
     middleY = (pointA[1] + pointB[1])/2
     return middleX, middleY 
-
-# Box_Distance_From_Horizontal_Line - TO BE DONE
-# Find_Border_Length - TO BE DONE
-# Find_Polygon_Area - TO BE DONE
