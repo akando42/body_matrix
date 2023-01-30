@@ -333,6 +333,8 @@ box, keypoints = infer.detect_main_target(
 )
 
 box
+
+center = measure.box_center_coordinate(box)
 ```
 
 Two_Boxes_Distance
@@ -424,7 +426,7 @@ box, keypoints = infer.detect_main_target(
     kp_transforms=keypoints_transform
 )
 
-distance = measure.box_distance_from_center(sample_frame, box)
+distance, area = measure.box_distance_from_center(sample_frame, box)
 
 ```
 
@@ -506,7 +508,7 @@ box, keypoints = infer.detect_main_target(
     kp_transforms=keypoints_transform
 )
 
-distance = measure.box_distance_from_horizontal_line(
+distance = measure.distance_from_horizon_line(
     sample_frame, 
     box
 )
@@ -514,16 +516,105 @@ distance
 ```
 
 Find_Border_Length - TO be DONE
+```
+```
+
 Find_Polygon_Area - TO be DONE
+```
+```
 
 #### Score
+Two_Points_Linear_Constants
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+from body_matrix import score
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Body_Matrixes/samples/man_01.mp4", 
+    90, 
+    1
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+selected_kps = process.keypoints_filter(
+    [ 'left_ankle', 'right_ankle'], 
+    keypoints
+)
+
+la = selected_kps['left_ankle']
+ra = selected_kps['right_ankle']
+
+alpha, beta = score.two_points_linear_constant(la, ra)
+print(alpha, beta)
+
+```
+
+Find_Segment_Line
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Body_Matrixes/samples/man_01.mp4", 
+    90, 
+    1
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+selected_kps = process.keypoints_filter(
+    [
+        'left_shoulder','right_shoulder', 
+        'left_hip', 'right_hip',  
+        'left_elbow','right_elbow',
+        'left_wrist', 'right_wrist',
+        'left_ankle', 'right_ankle'], 
+    keypoints
+)
+
+segment_model, segment_transform = load.segment_model("cpu")
+mask, mask_image, bool_mask = infer.segment_selected_target(
+    sample_frame, "cpu", selected_box, 0.9, segment_model, segment_transform
+)
+
+segment_area = process.segmentation_area(
+    sample_frame, 
+    bool_mask
+)
+
+ls = selected_kps['left_shoulder']
+rs = selected_kps['right_shoulder']
+
+alpha, beta = two_points_linear_constant(ls, rs)
+shoulder_line_coordinates = find_segment_line(segment_area, alpha, beta)
+
+```
+
 Find_Nearest_Value
 ```
+
 ```
 Find_Largest_Value
 ```
+
 ```
 Find_Best_Score
+```
+
+```
+
+SHA_Score
+```
+
+```
 
 #### Export
 Generate_Video_From_Images
