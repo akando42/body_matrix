@@ -600,20 +600,18 @@ shoulder_line_coordinates = find_segment_line(segment_area, alpha, beta)
 
 Find_Nearest_Value
 ```
-
 ```
+
 Find_Largest_Value
 ```
-
 ```
+
 Find_Best_Score
 ```
-
 ```
 
 SHA_Score
 ```
-
 ```
 
 #### Export
