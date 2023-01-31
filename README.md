@@ -598,6 +598,23 @@ shoulder_line_coordinates = find_segment_line(segment_area, alpha, beta)
 
 ```
 
+SHA_Score
+```
+from body_matrix import score
+
+shoulder_length = 239.0083680543424
+hip_length = 222.02026934494066
+back_length = 287.0339701150371
+leg_length = 431.9036764558864
+
+score = score.SHA_score(
+    shoulder_length, 
+    hip_length, 
+    back_length, 
+    leg_length
+)
+```
+
 Find_Nearest_Value
 ```
 ```
@@ -610,12 +627,19 @@ Find_Best_Score
 ```
 ```
 
-SHA_Score
+#### Export
+Generate_Video_From_Images
 ```
 ```
 
-#### Export
-Generate_Video_From_Images
 Generate_Seeking_Video_From_Images
+```
+```
+
 Generate_Instagram_Video_From_Images
+```
+```
+
 Generate_Youtube_Video_From_Images
+```
+```
