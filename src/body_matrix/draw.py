@@ -1,5 +1,10 @@
 from PIL import ImageDraw, ImageFont
 
+
+
+def draw_segmentation():
+
+
 def keypoint_markers(coordinates, image, label_font):
 	marker_font = ImageFont.truetype(label_font, 8)
 	sample = image.copy()
