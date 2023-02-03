@@ -2,6 +2,7 @@ import torch
 from PIL import ImageColor
 from torchvision.transforms.functional import pil_to_tensor
 from . import score
+from . import measure
 
 # Keypoints_Filter
 def keypoints_filter(selected_kpoints, detected_kpoints):
@@ -42,6 +43,15 @@ def segmentation_area(sample_image, bool_mask):
 
 	return positions
 
+# Human Segmentation Contour
+# def segmentation_contour(sample_image, bool_mask):
+#     tensor_image = pil_to_tensor(sample_image)
+# 	mask = torch.squeeze(bool_mask, 0)
+# 	img_to_draw = tensor_image.detach().clone()
+# 	color = ImageColor.getrgb('blue')
+# 	tensor_color = torch.tensor(color, dtype=torch.uint8)
+# 	img_to_draw[:, mask] = tensor_color[:, None]
+
 
 # Find Shoulder Points
 def find_shoulder_points(ls, rs, segment_positions):
@@ -62,58 +72,81 @@ def find_shoulder_points(ls, rs, segment_positions):
 			)
 
 	if lsX < rsX:
-	    shoulder_kps = {
-	        'left_shoulder': line_coordinates[0],
-	        'right_shoulder': line_coordinates[-1]
-	    }
+		shoulder_kps = {
+			'left_shoulder': line_coordinates[0],
+			'right_shoulder': line_coordinates[-1]
+		}
 	elif lsX > rsX:
-	    shoulder_kps = {
-	        'left_shoulder': line_coordinates[-1],
-	        'right_shoulder': line_coordinates[0]
-	    }
+		shoulder_kps = {
+			'left_shoulder': line_coordinates[-1],
+			'right_shoulder': line_coordinates[0]
+		}
 	return shoulder_kps
 
 
 # Find Hip Points
 def find_hip_points(lh, rh, lw, rw, segment_area):
-	alpha_hip, beta_hip = score.two_points_linear_constant(lh, rh)
+	hip_alpha, hip_beta = score.two_points_linear_constant(lh, rh)
 	hip_line_coordinates = score.find_segment_line(
-	    segment_area, 
-	    alpha_hip, 
-	    beta_hip
+		segment_area, 
+		hip_alpha, 
+		hip_beta
 	)
 
-	if lw[1] > lh[1]:
-	    precise_rh = hip_line_coordinates[-1]
-	    precise_lhX = 2 * middle_hip[0] - rh[0]
-	    precise_lhY = hip_alpha * precise_lhX + hip_beta
-	    precise_lh = [int(precise_lhX), int(precise_lhY)]
-	    hip_kps = {
-	        'left_hip': precise_lh,
-	        'right_hip': precise_rh
-	    }
-	    print("low left hand", hip_kps)
-	    
-	elif rw[1] > rh[1]:
-	    precise_lh = hip_line_coordinates[0]
-	    precise_rhX = 2 * middle_hip[0] - precise_lh[0]
-	    precise_rhY = hip_alpha * precise_rhX + hip_beta
-	    precise_rh = [int(precise_rhX), int(precise_rhY)] 
-	    
-	    hip_kps = {
-	        'left_hip': precise_lh,
-	        'right_hip': precise_rh
-	    }
-	    print("low right hand", hip_kps)
-	    
-	else:
-	    hip_kps = {
-	        'left_hip': hip_line_coordinates[0],
-	        'right_hip': hip_line_coordinates[-1]
-	    }
-	    print("both hand high", hip_kps)
+	middle_hip = measure.find_middle_point(lh, rh)
 
-	return hip_kps
+	if int(lw[1]) >= int(lw[0] * hip_alpha + hip_beta)*0.9:
+		precise_rh = hip_line_coordinates[-1]
+		precise_lhX = 2 * middle_hip[0] - rh[0]
+		precise_lhY = hip_alpha * precise_lhX + hip_beta
+		precise_lh = [int(precise_lhX), int(precise_lhY)]
+		hip_kps = {
+			'left_hip': precise_lh,
+			'right_hip': precise_rh
+		}
+		print(
+			"low left hand", hip_kps, 
+			"\n Left Wrist", lw,
+			"\n Left Hip: ", lh)
+		return hip_kps
+		
+	elif int(rw[1]) >= int(rw[0] * hip_alpha + hip_beta)*0.9:
+		precise_lh = hip_line_coordinates[0]
+		precise_rhX = 2 * middle_hip[0] - precise_lh[0]
+		precise_rhY = hip_alpha * precise_rhX + hip_beta
+		precise_rh = [int(precise_rhX), int(precise_rhY)] 
+		
+		hip_kps = {
+			'left_hip': precise_lh,
+			'right_hip': precise_rh
+		}
+		print(
+			"low right hand", hip_kps,
+			"\n Right Wrist: ", rw,
+			"\n Right Hip: ", rh
+		)
+		return hip_kps
+		
+	elif rw[1] < rh[1] and lw[1] < lh[1]:
+		hip_kps = {
+			'left_hip': hip_line_coordinates[0],
+			'right_hip': hip_line_coordinates[-1]
+		}
+
+		print(
+			"both hand high", hip_kps,
+			"\nLeft: ", lw, lh, 
+			"\nRight: ", rw, rh
+		)
+		return hip_kps
+	else:
+		hip_kps = {}
+		print(
+			"both hand low", hip_kps,
+			"\nLeft hand: ", lw[1], lh[1], 
+			"\nRight: ", rw[1], rh[1]
+		)
+
 
 
 # Find Top Head Points

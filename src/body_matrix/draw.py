@@ -1,10 +1,5 @@
 from PIL import ImageDraw, ImageFont
 
-
-
-def draw_segmentation():
-
-
 def keypoint_markers(coordinates, image, label_font):
 	marker_font = ImageFont.truetype(label_font, 8)
 	sample = image.copy()
@@ -178,3 +173,6 @@ def floating_rectangle_label(image, longitude_coordinate, point, label_text, lab
 
 	return sample 
 
+
+def drawing_segmentation_border():
+	pass

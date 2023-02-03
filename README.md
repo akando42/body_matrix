@@ -64,8 +64,10 @@ Segment_Selected_Target
 from body_matrix import infer
 from body_matrix import load
 
-segment_model, segment_transform = load.segment_model("cpu")
+
 video, frame_counts, fps, sample_frame = load.video("04_01.mp4", -90, 1)
+segment_model, segment_transform = load.segment_model("cpu")
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
 
 selected_box, keypoint = infer.detect_main_target(
 	sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
@@ -643,3 +645,4 @@ Generate_Instagram_Video_From_Images
 Generate_Youtube_Video_From_Images
 ```
 ```
+
