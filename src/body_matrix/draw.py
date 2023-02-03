@@ -39,7 +39,7 @@ def circle_label(image, radius, central_point, background_color, label, label_fo
 	draw.ellipse(
 		[(point[0]-radius, point[1]-radius), (point[0]+radius, point[1]+radius)],
 		fill=background_color,
-		outline="#ffffff",
+		outline=background_color,
 		width=1
 	)
 
@@ -174,5 +174,17 @@ def floating_rectangle_label(image, longitude_coordinate, point, label_text, lab
 	return sample 
 
 
-def drawing_segmentation_border():
-	pass
+def segmentation_contour(contour_pixels, contour_color, contour_size, font,  image):
+	contoured = image.copy()
+	for contour in contour_pixels:
+	    contoured = circle_label(
+	        contoured, 
+	        contour_size, 
+	        contour,
+	        background_color=contour_color,
+	        label=" ", 
+	        label_font=font,
+	        label_color=contour_color,   
+	    )
+
+	return contoured

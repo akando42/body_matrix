@@ -1,6 +1,6 @@
 import torch
 from PIL import ImageColor
-from torchvision.transforms.functional import pil_to_tensor
+from torchvision.transforms.functional import pil_to_tensor, to_pil_image
 from . import score
 from . import measure
 
@@ -37,20 +37,56 @@ def segmentation_area(sample_image, bool_mask):
 		&(img_to_draw[0] == 0)
 		&(img_to_draw[1] == 0)
 	)
+	print(x, y)
 	positions = []
 	for x, y in zip(y, x):
 		positions.append([x.item(), y.item(), x.item()*y.item()])
 
 	return positions
 
+
 # Human Segmentation Contour
-# def segmentation_contour(sample_image, bool_mask):
-#     tensor_image = pil_to_tensor(sample_image)
-# 	mask = torch.squeeze(bool_mask, 0)
-# 	img_to_draw = tensor_image.detach().clone()
-# 	color = ImageColor.getrgb('blue')
-# 	tensor_color = torch.tensor(color, dtype=torch.uint8)
-# 	img_to_draw[:, mask] = tensor_color[:, None]
+def segmentation_contour(sample_image, bool_mask):
+	tensor_image = pil_to_tensor(sample_image)
+	mask = torch.squeeze(bool_mask, 0)
+	img_to_draw = tensor_image.detach().clone()
+	color = ImageColor.getrgb('blue')
+	tensor_color = torch.tensor(color, dtype=torch.uint8)
+	img_to_draw[:, mask] = tensor_color[:, None]
+	colored = to_pil_image(img_to_draw)
+	x, y = torch.where(
+		(img_to_draw[2] == 255)
+		&(img_to_draw[0] == 0)
+		&(img_to_draw[1] == 0)
+	)
+
+	def check_if_contours(point, colored):
+		[x, y] = point[0].item(), point[1].item()
+		surrounding_pixels = [
+			(x-1, y-1),(x, y-1),(x+1, y-1),
+			(x-1, y), (x+1, y),
+			(x-1, y+1), (x, y+1), (x+1, y+1)
+		]
+		checked = 0
+		
+		for pixel in surrounding_pixels:
+			color = colored.getpixel(pixel)
+			if color != (0, 0, 255):
+				checked = checked + 1
+				
+		return checked
+
+	contours = []
+	for x, y in zip(y, x):
+		result = check_if_contours(
+			(x, y), 
+			colored
+		)
+		
+		if result != 0:
+			contours.append([x.item(), y.item()])
+
+	return contours
 
 
 # Find Shoulder Points
