@@ -63,7 +63,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
         )
         
         segment_area = process.segmentation_area(
-            sample_frame, 
+            image, 
             bool_mask
         )
         
@@ -112,7 +112,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
 
        
         
-        SHA_score = score.SHA_score(
+        SHA_score = SHA_score(
             ls=main_points['left_shoulder'], 
             rs=main_points['right_shoulder'],
             lh=main_points['left_hip'],
