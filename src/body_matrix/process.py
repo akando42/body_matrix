@@ -24,6 +24,7 @@ def keypoints_filter(selected_kpoints, detected_kpoints):
 
 	return kp_positions
 
+
 # Human Segmentation Area
 def segmentation_area(sample_image, bool_mask):
 	tensor_image = pil_to_tensor(sample_image)
@@ -90,31 +91,22 @@ def segmentation_contour(sample_image, bool_mask):
 
 
 # Find Shoulder Points
-def find_shoulder_points(ls, rs, segment_positions):
-	lsX = ls[0]
-	lsY = ls[1]
-	rsX = rs[0]
-	rsY = rs[1]
-	
-	alpha = (rsY - lsY)/(rsX - lsX)
-	beta = (rsX * lsY - rsY * lsX)/(rsX - lsX)
+def find_shoulder_points(ls, rs, segment_area):
+	shoulder_alpha, shoulder_beta = score.two_points_linear_constant(ls, rs)
+	shoulder_lines = score.find_segment_line(
+	    segment_area, 
+	    shoulder_alpha, 
+	    shoulder_beta
+	)
 
-	line_coordinates = []
-	for idx, position in enumerate(segment_positions):
-		expectedY = alpha * position[0] + beta
-		if position[1] == expectedY:
-			line_coordinates.append(
-				[position[0], position[1]]
-			)
-
-	if lsX < rsX:
+	if ls[0] < rs[0]:
 		shoulder_kps = {
-			'left_shoulder': line_coordinates[0],
-			'right_shoulder': line_coordinates[-1]
+			'left_shoulder': shoulder_lines[0],
+			'right_shoulder': shoulder_lines[-1]
 		}
-	elif lsX > rsX:
+	elif ls[0] > rs[0]:
 		shoulder_kps = {
-			'left_shoulder': line_coordinates[-1],
+			'left_shoulder': shoulder_lines[-1],
 			'right_shoulder': line_coordinates[0]
 		}
 	return shoulder_kps
@@ -140,10 +132,10 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		print(
-			"low left hand", hip_kps, 
-			"\n Left Wrist", lw,
-			"\n Left Hip: ", lh)
+		# print(
+		# 	"low left hand", hip_kps, 
+		# 	"\n Left Wrist", lw,
+		# 	"\n Left Hip: ", lh)
 		return hip_kps
 		
 	elif int(rw[1]) >= int(rw[0] * hip_alpha + hip_beta)*0.9:
@@ -156,11 +148,11 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		print(
-			"low right hand", hip_kps,
-			"\n Right Wrist: ", rw,
-			"\n Right Hip: ", rh
-		)
+		# print(
+		# 	"low right hand", hip_kps,
+		# 	"\n Right Wrist: ", rw,
+		# 	"\n Right Hip: ", rh
+		# )
 		return hip_kps
 		
 	elif rw[1] < rh[1] and lw[1] < lh[1]:
@@ -169,11 +161,11 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			'right_hip': hip_line_coordinates[-1]
 		}
 
-		print(
-			"both hand high", hip_kps,
-			"\nLeft: ", lw, lh, 
-			"\nRight: ", rw, rh
-		)
+		# print(
+		# 	"both hand high", hip_kps,
+		# 	"\nLeft: ", lw, lh, 
+		# 	"\nRight: ", rw, rh
+		# )
 		return hip_kps
 	else:
 		hip_kps = {}
@@ -182,7 +174,6 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			"\nLeft hand: ", lw[1], lh[1], 
 			"\nRight: ", rw[1], rh[1]
 		)
-
 
 
 # Find Top Head Points

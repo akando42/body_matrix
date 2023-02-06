@@ -102,6 +102,7 @@ def connecting_line(image, pointA, pointB, line_color, line_width):
 
 	return sample
 
+
 def floating_rectangle_label(image, longitude_coordinate, point, label_text, label_size, label_color, label_font, background_color):
 	sample = image.copy()
 	draw = ImageDraw.Draw(sample)
