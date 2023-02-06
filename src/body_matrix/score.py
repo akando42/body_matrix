@@ -112,7 +112,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
 
        
         
-        SHA_score = SHA_score(
+        score = SHA_score(
             ls=main_points['left_shoulder'], 
             rs=main_points['right_shoulder'],
             lh=main_points['left_hip'],
@@ -122,7 +122,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
         )
         
         SHA_frames.append(float_labeled_frame)
-        SHA_scores.append(SHA_score)
+        SHA_scores.append(score)
         print("##############################")
         print("Finished Processing ", index, " with score ", SHA_score)
         print("##############################")
