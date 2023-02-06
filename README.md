@@ -139,8 +139,47 @@ segment_area = process.segmentation_area(
 )
 
 ```
-Find_Segmentation_Intersection - TO be DONE
-Find_Segmentation_Contour - TO be DONE
+Segmentation_Contour
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/content/drive/MyDrive/Body_Matrix/Raw_Vids/VID_20230102_171936~2.mp4", 
+    -90, 
+    2
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cuda")
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cuda", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+    ['nose','left_shoulder','right_shoulder'], 
+    keypoints
+)
+
+segment_model, segment_transform = load.segment_model("cuda")
+mask, mask_image, bool_mask = infer.segment_selected_target(
+    sample_frame, "cuda", selected_box, 0.99, segment_model, segment_transform
+)
+
+segment_area = process.segmentation_area(
+    sample_frame, 
+    bool_mask
+)
+
+segment_contours = process.segmentation_contour(
+    sample_frame, 
+    bool_mask
+)
+
+```
+
+Segmentation_Intersection - TO be DONE
+
 Filter_Segmentation_Intersection - TO be DONE
 
 #### Draw
@@ -314,6 +353,56 @@ for key, value in selected_kps.items():
     )    
 
 float_sample
+```
+
+Draw Segmentation_Contour 
+```
+from body_matrix import load
+from body_matrix import infer
+from body_matrix import process
+from body_matrix import process
+from body_matrix import draw
+
+video, frame_counts, fps, sample_frame = load.video(
+    "sample02.mp4", 
+    -90, 
+    1
+)
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+selected_kps = process.keypoints_filter(
+    ['nose','left_shoulder','right_shoulder'], 
+    keypoints
+)
+
+segment_model, segment_transform = load.segment_model("cpu")
+mask, mask_image, bool_mask = infer.segment_selected_target(
+    sample_frame, "cpu", selected_box, 0.99, segment_model, segment_transform
+)
+
+segment_area = process.segmentation_area(
+    sample_frame, 
+    bool_mask
+)
+
+updated_contours = process.segmentation_contour(
+    sample_frame, 
+    bool_mask
+)
+
+contoured_image = draw.segmentation_contour(
+    contour_pixels = updated_contours, 
+    contour_color = "#ffffff",
+    contour_size=2,
+    font="/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf", 
+    image=sample_frame
+)
+
+contoured_image
 ```
 
 #### Measure
