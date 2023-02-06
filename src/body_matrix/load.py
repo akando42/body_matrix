@@ -44,9 +44,9 @@ def video(video_path, rotate_angle, frame_position):
 def image_frames(sample_dir):
 	frames = sorted(os.listdir(sample_dir))
 	total_frames = len(frames)
-	print("\nTotal Frames: ",total_frames)
+	#print("\nTotal Frames: ",total_frames)
 	frames_path = ["" for x in range(total_frames)]
-	print("\nTotal Paths: ",len(frames_path))
+	#print("\nTotal Paths: ",len(frames_path))
 	for frame_index, frame in enumerate(frames):     
 		frames_path[frame_index] = os.path.join(sample_dir + "/" + frame)  
 	return frames_path
