@@ -107,7 +107,7 @@ def find_shoulder_points(ls, rs, segment_area):
 	elif ls[0] > rs[0]:
 		shoulder_kps = {
 			'left_shoulder': shoulder_lines[-1],
-			'right_shoulder': line_coordinates[0]
+			'right_shoulder': shoulder_lines[0]
 		}
 	return shoulder_kps
 

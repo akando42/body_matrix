@@ -755,6 +755,41 @@ Find_Best_Score
 #### Export
 Generate_Video_From_Images
 ```
+from body_matrix import load, score, export
+
+video, frames_counts, fps, sample_frame = load.video(
+    "/content/drive/MyDrive/Body_Matrix/Raw_Vids/VID_20230109_114329~2.mp4", 
+    rotate_angle=-90, 
+    frame_position=1
+)
+print(frames_counts)
+sample_frame
+
+### Load Keypoints Model
+segment_model, segment_transform = load.segment_model("cuda")
+keypoints_model, keypoints_transform = load.keypoints_model("cuda")
+
+### Iterate Over Video Frame for SHA Score
+SHA_frames, SHA_scores = score.video_SHA_score(
+    vid=video,
+    device="cuda", 
+    font_dir="/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf",
+    segment_model=segment_model,
+    segment_transform=segment_transform, 
+    keypoints_model=keypoints_model, 
+    keypoints_transform=keypoints_transform
+)
+
+vid_width = sample_frame.width
+vid_height = sample_frame.height
+vid_output = "visualized.mp4"
+
+export.generate_video_from_pil_images(
+    pil_images=SHA_frames, 
+    output=vid_output, 
+    width=vid_width,
+    height=vid_height
+)
 ```
 
 Generate_Seeking_Video_From_Images
