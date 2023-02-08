@@ -7,8 +7,12 @@ def two_points_linear_constant(a, b):
     aY = a[1]
     bX = b[0]
     bY = b[1]
-    alpha = (bY - aY)/(bX - aX)
-    beta = (bX * aY - bY * aX)/(bX - aX)
+    if (bX-aX) != 0:
+        alpha = (bY - aY)/(bX - aX)
+        beta = (bX * aY - bY * aX)/(bX - aX)
+    else:
+        alpha = None
+        beta = None
     return alpha, beta
 
 
@@ -35,6 +39,7 @@ def SHA_score(ls, rs, lh, rh, la, ra):
     # hs_score = int(hL/sL*1000) 
     # lb_score = int(lL/bL*1000)
     return score
+
 
 def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, keypoints_model, keypoints_transform):
     SHA_frames = []
@@ -80,6 +85,10 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
             selected_kps['right_shoulder'],
             segment_area
         )
+
+        if hip_kps == None or shoulder_kps == None:
+            print("KEYPOINT ERRORS")
+            continue
         
         main_points = {}
         main_points.update(hip_kps)
@@ -96,6 +105,8 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
             main_points['right_hip']
         )
 
+
+
         float_labeled_frame = image
         for key, value in main_points.items():
             print(key, value)
@@ -111,7 +122,6 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
             )    
 
        
-        
         score = SHA_score(
             ls=main_points['left_shoulder'], 
             rs=main_points['right_shoulder'],

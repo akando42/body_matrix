@@ -93,6 +93,10 @@ def segmentation_contour(sample_image, bool_mask):
 # Find Shoulder Points
 def find_shoulder_points(ls, rs, segment_area):
 	shoulder_alpha, shoulder_beta = score.two_points_linear_constant(ls, rs)
+
+	if shoulder_alpha == None or shoulder_beta == None:
+		return None
+
 	shoulder_lines = score.find_segment_line(
 	    segment_area, 
 	    shoulder_alpha, 
@@ -115,6 +119,10 @@ def find_shoulder_points(ls, rs, segment_area):
 # Find Hip Points with Hip Line Coordinate
 def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 	hip_alpha, hip_beta = score.two_points_linear_constant(lh, rh)
+
+	if hip_alpha == None or hip_beta == None:
+		return None
+
 	hip_line_coordinates = score.find_segment_line(
 		segment_area, 
 		hip_alpha, 
@@ -177,6 +185,7 @@ def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 		)
 		return hip_kps
 
+
 # Find Hip Points with Segmentation Area
 def find_hip_points(lh, rh, lw, rw, segment_area):
 	lhX = lh[0]
@@ -186,6 +195,10 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 	rhY = rh[1]
 
 	hip_alpha, hip_beta = score.two_points_linear_constant(lh, rh)
+
+	if hip_alpha == None or hip_beta == None:
+		return None
+
 	hip_line_coordinates = score.find_segment_line(
 		segment_area, 
 		hip_alpha, 
