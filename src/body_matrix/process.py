@@ -112,8 +112,8 @@ def find_shoulder_points(ls, rs, segment_area):
 	return shoulder_kps
 
 
-# Find Hip Points
-def find_hip_points(lh, rh, lw, rw, segment_area):
+# Find Hip Points with Hip Line Coordinate
+def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 	hip_alpha, hip_beta = score.two_points_linear_constant(lh, rh)
 	hip_line_coordinates = score.find_segment_line(
 		segment_area, 
@@ -123,7 +123,28 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 
 	middle_hip = measure.find_middle_point(lh, rh)
 
-	if int(lw[1]) >= int(lw[0] * hip_alpha + hip_beta)*0.9:
+	if rw[1] < rh[1] and lw[1] < lh[1]:
+		hip_kps = {
+			'left_hip': hip_line_coordinates[0],
+			'right_hip': hip_line_coordinates[-1]
+		}
+
+		print(
+			"both hand high", hip_kps,
+			"\nLeft: ", lw, lh, 
+			"\nRight: ", rw, rh
+		)
+		return hip_kps
+
+	elif rw[1] > rh[1] and lw[1] > lh[1]:
+		hip_kps = {}
+		print(
+			"both hand low", hip_kps,
+			"\nLeft hand: ", lw[1], lh[1], 
+			"\nRight: ", rw[1], rh[1]
+		)
+
+	elif int(lw[1]) >= int(lw[0] * hip_alpha + hip_beta)*0.9:
 		precise_rh = hip_line_coordinates[-1]
 		precise_lhX = 2 * middle_hip[0] - rh[0]
 		precise_lhY = hip_alpha * precise_lhX + hip_beta
@@ -132,11 +153,12 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		# print(
-		# 	"low left hand", hip_kps, 
-		# 	"\n Left Wrist", lw,
-		# 	"\n Left Hip: ", lh)
+		print(
+			"low left hand", hip_kps, 
+			"\n Left Wrist", lw,
+			"\n Left Hip: ", lh)
 		return hip_kps
+		
 		
 	elif int(rw[1]) >= int(rw[0] * hip_alpha + hip_beta)*0.9:
 		precise_lh = hip_line_coordinates[0]
@@ -148,33 +170,66 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		# print(
-		# 	"low right hand", hip_kps,
-		# 	"\n Right Wrist: ", rw,
-		# 	"\n Right Hip: ", rh
-		# )
+		print(
+			"low right hand", hip_kps,
+			"\n Right Wrist: ", rw,
+			"\n Right Hip: ", rh
+		)
 		return hip_kps
-		
-	elif rw[1] < rh[1] and lw[1] < lh[1]:
+
+# Find Hip Points with Segmentation Area
+def find_hip_points(lh, rh, lw, rw, segment_area):
+	lhX = lh[0]
+	lhY = lh[1]
+
+	rhX = rh[0]
+	rhY = rh[1]
+
+	hip_alpha, hip_beta = score.two_points_linear_constant(lh, rh)
+	hip_line_coordinates = score.find_segment_line(
+		segment_area, 
+		hip_alpha, 
+		hip_beta
+	)
+
+	middle_hip = measure.find_middle_point(lh, rh)
+	lThreshold = middle_hip[0] - measure.two_points_distance(
+		measure.find_middle_point(lh, rh), lh
+	) * 1.8
+
+	rThreshold = middle_hip[0] + measure.two_points_distance(
+		measure.find_middle_point(lh, rh), rh
+	) * 1.8
+
+	for idx, position in enumerate(segment_area):
+		expectedY = hip_alpha * position[0] + hip_beta
+
+		if int(position[1]) == int(expectedY) and position[0] > lThreshold and position[0] < middle_hip[0]:
+			lhY = position[1]
+
+			if position[0] < lhX:
+				lhX = position[0]
+
+		elif int(position[1]) == int(expectedY) and position[0] < rThreshold and position[0] > middle_hip[0]:
+			rhY = position[1]
+			if position[0] > rhX:
+				rhX = position[0]
+
+	if lh[0] < rh[0]:
 		hip_kps = {
-			'left_hip': hip_line_coordinates[0],
-			'right_hip': hip_line_coordinates[-1]
+			'left_hip': (lhX, lhY), 
+			'right_hip': (rhX, rhY)
 		}
 
-		# print(
-		# 	"both hand high", hip_kps,
-		# 	"\nLeft: ", lw, lh, 
-		# 	"\nRight: ", rw, rh
-		# )
 		return hip_kps
-	else:
-		hip_kps = {}
-		print(
-			"both hand low", hip_kps,
-			"\nLeft hand: ", lw[1], lh[1], 
-			"\nRight: ", rw[1], rh[1]
-		)
 
+	elif  lh[0] > rh[0]:
+		hip_kps = {
+			'left_hip': (rhX, rhY), 
+			'right_hip': (lhX, lhY)
+		}
+		return hip_kps
+		
 
 # Find Top Head Points
 def find_tophead_point(le, re, ls, rs, segment_positions):
