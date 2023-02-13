@@ -245,7 +245,13 @@ def find_hip_points(lh, rh, lw, rw, segment_area):
 		
 
 # Find Top Head Points
-def find_tophead_point(le, re, ls, rs, segment_positions):
+def find_tophead_point(le, re, segment_contours):
+	tophead_pt = {}
+	middle_ear = measure.find_middle_point(le, re)
 
+	for contour_point in segment_contours:
+	    if int(contour_point[0]) == int(middle_ear[0]) and int(contour_point[1]) < int(middle_ear[1]):
+	        tophead_pt = (contour_point[0], contour_point[1])
+	        
 	return tophead_pt
 

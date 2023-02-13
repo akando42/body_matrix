@@ -1,4 +1,5 @@
-from PIL import ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
+from . import measure
 
 def keypoint_markers(coordinates, image, label_font):
 	marker_font = ImageFont.truetype(label_font, 8)
@@ -189,3 +190,41 @@ def segmentation_contour(contour_pixels, contour_color, contour_size, font,  ima
 	    )
 
 	return contoured
+
+
+def add_crown(score, le, re, top_head,frame, crown_image, font_file):
+	middle_ear = measure.find_middle_point(le, re)
+	head_width = measure.two_points_distance(le, re)
+	crown_width = int(head_width * 1.6)
+	crown_height = int(head_width * 0.8)
+	crown_size = (crown_width,crown_height)
+	crown = Image.open(crown_image)
+	crown = crown.resize(crown_size)
+	draw = ImageDraw.Draw(crown)
+	font_size = int(crown_width/5)
+	font = ImageFont.truetype(font_file, font_size)
+	draw.text(
+	    (crown_width/4,crown_height/2), 
+	    str(score),
+	    fill="#FF0000",
+	    font=font,
+	    align="center"
+	)
+
+	crown_position = (
+	    int(top_head[0] - crown_width/2), 
+	    int(top_head[1] - crown_height)
+	)
+
+	crowned = frame.copy()
+	crowned.paste(crown, crown_position, crown)
+
+	return crowned
+
+
+# def add_thong(score, lh, rh, frame):
+# 	return
+
+
+
+

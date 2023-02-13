@@ -54,7 +54,7 @@ from body_matrix import load
 keypoints_model, keypoints_transform = load.keypoints_model("cpu")
 video, frame_counts, fps, sample_frame = load.video("04_01.mp4", -90, 1)
 
-selected_box, keypoint = infer.detect_main_target(
+selected_box, keypoints = infer.detect_main_target(
 	sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
 )
 ```
@@ -405,6 +405,22 @@ contoured_image = draw.segmentation_contour(
 contoured_image
 ```
 
+Add Crown
+```
+from body_matrix import draw
+
+crowned = draw.add_crown(
+    score=1200, 
+    le=selected_kps['left_ear'], 
+    re=selected_kps['right_ear'], 
+    top_head=top_head, 
+    frame=sample_frame, 
+    crown_image="/content/drive/MyDrive/Body_Matrix/crown.png",
+    font_file="/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf"
+)
+crowned
+```
+
 #### Measure
 Box_Center_Coordinate
 ```
@@ -606,14 +622,6 @@ distance = measure.distance_from_horizon_line(
 distance
 ```
 
-Find_Border_Length - TO be DONE
-```
-```
-
-Find_Polygon_Area - TO be DONE
-```
-```
-
 #### Score
 Two_Points_Linear_Constants
 ```
@@ -740,20 +748,53 @@ SHA_frames[index]
 
 ```
 
-Find_Nearest_Value
+Video_SHA_scores
 ```
+from body_matrix import load, score
+video, frames_counts, fps, sample_frame = load.video(
+    "/content/drive/MyDrive/Body_Matrix/Raw_Vids/VID_20220831_161746.mp4", 
+    rotate_angle=-90, 
+    frame_position=1
+)
+print(frames_counts)
+sample_frame
+
+### Load Keypoints Model
+segment_model, segment_transform = load.segment_model("cuda")
+keypoints_model, keypoints_transform = load.keypoints_model("cuda")
+
+### Iterate Over Video Frame for SHA Score
+SHA_frames, SHA_scores, SHA_measures = score.video_SHA_score(
+    vid=video,
+    device="cuda", 
+    font_dir="/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf",
+    segment_model=segment_model,
+    segment_transform=segment_transform, 
+    keypoints_model=keypoints_model, 
+    keypoints_transform=keypoints_transform
+)
+
+index = int(len(SHA_scores)/2)
+print(SHA_scores[index])
+SHA_frames[index]
 ```
 
-Find_Largest_Value
+best_scores
 ```
+import numpy as np 
+import seaborn as sns
+
+mean, median, minim, maxim = score.best_scores(SHA_scores, 1000, 1800)
 ```
 
-Find_Best_Score
+find_nearest
 ```
+best_frame_score, best_frame_index = score.find_nearest(SHA_scores, median)
+SHA_frames[best_frame_index]
 ```
 
 #### Export
-Generate_Video_From_Images
+Generate_Video_From_PIL_Images
 ```
 from body_matrix import load, score, export
 
@@ -794,10 +835,60 @@ export.generate_video_from_pil_images(
 
 Generate_Seeking_Video_From_Images
 ```
+import av
+from body_matrix import load, export
+from torchvision.transforms.functional import to_pil_image
+
+video, frames_counts, fps, sample_frame = load.video(
+    "/content/drive/MyDrive/Body_Matrix/Raw_Vids/VID_20221130_113813~2.mp4", 
+    -90, 
+    1
+)
+
+pil_images = []
+for frame in video:
+    pil_image = to_pil_image(frame)
+    pil_image = pil_image.rotate(-90, expand=True)
+    pil_images.append(pil_image)
+
+export.generate_seek_video(
+    pil_images=pil_images, 
+    target_index= int(frames_counts/3), 
+    output="fun.mp4", 
+    width=sample_frame.width, 
+    height=sample_frame.height
+)
 ```
 
 Generate_Instagram_Video_From_Images
 ```
+import av
+from body_matrix import load, export
+from torchvision.transforms.functional import to_pil_image
+
+video, frames_counts, fps, sample_frame = load.video(
+    "/content/drive/MyDrive/Body_Matrix/Raw_Vids/VID_20221130_113813~2.mp4", 
+    -90, 
+    1
+)
+
+pil_images = []
+for frame in video:
+    pil_image = to_pil_image(frame)
+    pil_image = pil_image.rotate(-90, expand=True)
+    pil_images.append(pil_image)
+
+export.generate_instagram_vid(
+    vid_name="instagram.mp4", 
+    vid_width = sample_frame.width, 
+    vid_height = sample_frame.width, 
+    pil_images = pil_images, 
+    stop_index=int(frames_counts/2), 
+    fps=fps, 
+    repeat_rate=2, 
+    slow_motion_rate=1
+)
+
 ```
 
 Generate_Youtube_Video_From_Images

@@ -123,8 +123,8 @@ def segment_selected_target(frame, device, selected_bbox, segment_min_accuracy, 
     counts, values = np.histogram(numpy_mask, bins=10)
     min_counts = np.min(counts)
     idx = np.where(counts == min_counts)
-    threshold = values[idx] 
-    numpy_bool_mask = numpy_mask > threshold
+    thresholds = sorted(values[idx]) 
+    numpy_bool_mask = numpy_mask > thresholds[0]
     bool_mask = torch.tensor(numpy_bool_mask)
     
     return mask, mask_image, bool_mask

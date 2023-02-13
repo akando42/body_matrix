@@ -1,4 +1,5 @@
 import numpy as np
+import seaborn as sns
 from torchvision.transforms.functional import to_pil_image
 from . import load, infer, process, measure, draw
 
@@ -36,14 +37,20 @@ def SHA_score(ls, rs, lh, rh, la, ra):
     bL = measure.two_points_distance(ms, mh)
     lL = measure.two_points_distance(mh, ma)
     score = int((hL * lL) / (sL * bL) * 1000)
-    # hs_score = int(hL/sL*1000) 
-    # lb_score = int(lL/bL*1000)
-    return score
+    measures = {
+        'shoulder':sL,
+        'hip':hL, 
+        'back':bL,
+        'leg':lL
+    }
+
+    return score, measures
 
 
 def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, keypoints_model, keypoints_transform):
     SHA_frames = []
     SHA_scores = []
+    SHA_measures = []
     
     for index, frame in enumerate(vid):
         image = to_pil_image(frame)
@@ -105,8 +112,6 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
             main_points['right_hip']
         )
 
-
-
         float_labeled_frame = image
         for key, value in main_points.items():
             print(key, value)
@@ -122,7 +127,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
             )    
 
        
-        score = SHA_score(
+        score, measures = SHA_score(
             ls=main_points['left_shoulder'], 
             rs=main_points['right_shoulder'],
             lh=main_points['left_hip'],
@@ -132,12 +137,15 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
         )
         
         SHA_frames.append(float_labeled_frame)
+
         SHA_scores.append(score)
+        SHA_measures.append(measures)
+
         print("##############################")
-        print("Finished Processing ", index, " with score ", score)
+        print("Finished Processing ", index, " with score ", score, "\nand measures ", measures)
         print("##############################")
         
-    return SHA_frames, SHA_scores
+    return SHA_frames, SHA_scores, SHA_measures
 
 
 def find_nearest(array, value):
@@ -152,6 +160,26 @@ def find_largest(array, value):
 	distance_array = np.abs(np_scores - value)
 	idx = distance_array.argmax()
 	return array[idx], idx
+
+
+def best_scores(array, min_val, max_val):
+    scores = []
+    for x in array:
+        if x > max_val or x <  min_val:
+            pass
+        else:
+            scores.append(x)
+            
+    np_scores = np.array(scores)
+    mean = np.mean(np_scores)
+    median = np.median(np_scores)
+    minim = np.min(np_scores)
+    maxim = np.max(np_scores)
+    histogram_scores = np.histogram(np_scores)
+    print(mean, median)
+    sns.distplot(np_scores, hist=True)
+    
+    return mean, median, minim, maxim
 
 
 
