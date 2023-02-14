@@ -1,7 +1,9 @@
 import av
 from PIL import Image
 
-# Generate Video from PIL Image Arrays
+##########################################
+# Generate Video from PIL Image Arrays ###
+##########################################
 def generate_video_from_pil_images(pil_images, output, width, height):
 	container = av.open(output, mode="w")
 
@@ -18,6 +20,7 @@ def generate_video_from_pil_images(pil_images, output, width, height):
 		encode(pil_image)
 	
 	container.close()
+
 
 ##############################
 #### Generate Seek Video #####
@@ -113,6 +116,7 @@ def generate_instagram_vid(vid_name, vid_width, vid_height, pil_images, stop_ind
 
 	### Close Container
 	container.close()
+
 
 ##########################################
 ##### Generate Long Video from Frames#####
