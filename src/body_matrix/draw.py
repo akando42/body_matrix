@@ -222,7 +222,7 @@ def add_crown(score, le, re, top_head,frame, crown_image, font_file):
 	return crowned
 
 
-# def add_thong(score, lh, rh, frame):
+# def add_thong(score, lh, rh, frame, font_file):
 # 	return
 
 

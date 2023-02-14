@@ -1,9 +1,9 @@
 import av
 from PIL import Image
 
-##########################################
-# Generate Video from PIL Image Arrays ###
-##########################################
+##############################################
+##### Generate Video from PIL Image Arrays ###
+##############################################
 def generate_video_from_pil_images(pil_images, output, width, height):
 	container = av.open(output, mode="w")
 
@@ -118,9 +118,9 @@ def generate_instagram_vid(vid_name, vid_width, vid_height, pil_images, stop_ind
 	container.close()
 
 
-##########################################
-##### Generate Long Video from Frames#####
-##########################################
+###########################################
+##### Generate Long Video from Frames  ####
+###########################################
 def generate_long_video(pil_images, scroll_speed, fps):
     total_frames = len(pil_images)
     image = pil_images[0]
@@ -130,7 +130,7 @@ def generate_long_video(pil_images, scroll_speed, fps):
     
     for idx in range(total_frames):
         x = idx * image.width
-        image = Image.open(frames[idx])
+        image = pil_images[idx]
         long_image.paste(image, box=(x, 0))
         if idx == total_frames - 1:
             long_image.save("long_image.png")
