@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: body-matrix
-Version: 0.2.8
+Version: 0.2.9
 Summary: Package to Calculate Human Body Measurements
 Author-email: Hoang Do <hoang.do.2102@gmail.com>
 Project-URL: Homepage, https://github.com/akando42/body_matrix
@@ -905,7 +905,32 @@ export.generate_instagram_vid(
 
 ```
 
-Generate_Youtube_Video_From_Images
+Generate_Long_Video
 ```
+import os
+from body_matrix import load, export
+
+video_dir = "/content/drive/MyDrive/Body_Matrix/Raw_Vids/"
+video_list = os.listdir(video_dir)
+video_links = []
+
+for video in video_list:
+    video_path = video_dir + video
+    video_links.append(video_path)
+
+pil_images = []
+for vid in video_links:
+    video, frames_counts, fps, sample_frame = load.video(
+        vid, 
+        -90, 
+        1
+    )
+    pil_images.append(sample_frame)
+
+export.generate_long_video(
+    pil_images=pil_images, 
+    scroll_speed=5,
+    fps=30
+)
 ```
 

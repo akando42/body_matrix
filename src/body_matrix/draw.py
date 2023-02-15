@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from . import measure
 
 def keypoint_markers(coordinates, image, label_font):
@@ -220,6 +220,22 @@ def add_crown(score, le, re, top_head,frame, crown_image, font_file):
 	crowned.paste(crown, crown_position, crown)
 
 	return crowned
+
+
+def blur_background(segment_area, sample_frame):
+	
+	return bbox
+
+
+def blur_background_around_bbox(bbox, sample_frame):
+	top_left = (int(bbox[0]), int(bbox[1]))
+	target = sample_frame.crop(bbox)
+	blurImage = sample_frame.filter(ImageFilter.GaussianBlur(10))
+	blurImage.paste(
+		target, 
+		top_left
+	)
+	return blurImage
 
 
 # def add_thong(score, lh, rh, frame, font_file):

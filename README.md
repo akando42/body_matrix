@@ -421,6 +421,28 @@ crowned = draw.add_crown(
 crowned
 ```
 
+Draw Background Blur
+```
+from body_matrix import load, infer, process, draw
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Raw_Vids/VID_20230109_154951~2.mp4", 
+    -90, 
+    40
+)
+
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+blurImage = draw.blur_background_around_bbox(
+    selected_box, 
+    sample_frame
+)
+
+```
+
 #### Measure
 Box_Center_Coordinate
 ```
@@ -875,7 +897,7 @@ video, frames_counts, fps, sample_frame = load.video(
 pil_images = []
 for frame in video:
     pil_image = to_pil_image(frame)
-    pil_image = pil_image.rotate(-90, expand=True)
+    pil_image.rotate(-90, expand=True)
     pil_images.append(pil_image)
 
 export.generate_instagram_vid(
