@@ -38,11 +38,36 @@ def segmentation_area(sample_image, bool_mask):
 		&(img_to_draw[0] == 0)
 		&(img_to_draw[1] == 0)
 	)
-	print(x, y)
+	# print(x, y)
 	positions = []
 	for x, y in zip(y, x):
-		positions.append([x.item(), y.item(), x.item()*y.item()])
+		positions.append(
+			[x.item(), y.item()]
+		)
 
+	return positions
+
+
+# Background Around Segmentation Area
+def outside_segmentation_area(sample_image, bool_mask):
+	inverse_bool_mask = ~bool_mask
+	tensor_image = pil_to_tensor(sample_image)
+	inverse_mask = torch.squeeze(inverse_bool_mask, 0)
+	img_to_draw = tensor_image.detach().clone()
+	color = ImageColor.getrgb('blue')
+	tensor_color = torch.tensor(color, dtype=torch.uint8)
+	img_to_draw[:, inverse_mask] = tensor_color[:, None]
+	x, y = torch.where(
+		(img_to_draw[2] == 255)
+		&(img_to_draw[0] == 0)
+		&(img_to_draw[1] == 0)
+	)
+
+	positions = []
+	for x, y in zip(y, x):
+	    positions.append(
+	    	[x.item(), y.item()]
+	    )
 	return positions
 
 
