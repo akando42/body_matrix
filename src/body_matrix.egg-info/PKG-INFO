@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: body-matrix
-Version: 0.2.9
+Version: 0.3.0
 Summary: Package to Calculate Human Body Measurements
 Author-email: Hoang Do <hoang.do.2102@gmail.com>
 Project-URL: Homepage, https://github.com/akando42/body_matrix
@@ -433,6 +433,28 @@ crowned = draw.add_crown(
     font_file="/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf"
 )
 crowned
+```
+
+Draw Background Blur
+```
+from body_matrix import load, infer, process, draw
+
+keypoints_model, keypoints_transform = load.keypoints_model("cpu")
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Raw_Vids/VID_20230109_154951~2.mp4", 
+    -90, 
+    40
+)
+
+selected_box, keypoints = infer.detect_main_target(
+    sample_frame, "cpu", 0.8, keypoints_model, keypoints_transform
+)
+
+blurImage = draw.blur_background_around_bbox(
+    selected_box, 
+    sample_frame
+)
+
 ```
 
 #### Measure
@@ -889,7 +911,7 @@ video, frames_counts, fps, sample_frame = load.video(
 pil_images = []
 for frame in video:
     pil_image = to_pil_image(frame)
-    pil_image = pil_image.rotate(-90, expand=True)
+    pil_image.rotate(-90, expand=True)
     pil_images.append(pil_image)
 
 export.generate_instagram_vid(

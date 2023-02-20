@@ -52,6 +52,7 @@ def distance_from_horizon_line(pic, bbox):
     area = abs(bbox_width * bbox_height)
     return dfh, area
 
+
 ### Box_Distance_From_Center
 def box_distance_from_center(pic, bbox):
     pic_width = pic.width
@@ -68,12 +69,14 @@ def box_distance_from_center(pic, bbox):
     area = abs(bbox_width * bbox_height)
     return distance, area
 
+
 ### Two_Points_Distance
 def two_points_distance(pointA, pointB):
     x_dif = (pointA[0] - pointB[0])
     y_dif = (pointA[1] - pointB[1])
     dif = math.sqrt(x_dif * x_dif + y_dif * y_dif)
     return dif
+
 
 ### Find_Middle_Point
 def find_middle_point(pointA, pointB):
