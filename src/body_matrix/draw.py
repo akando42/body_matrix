@@ -192,6 +192,10 @@ def segmentation_contour(contour_pixels, contour_color, contour_size, font,  ima
 	return contoured
 
 
+def segmentation_overlay(segment_area, color):
+	
+
+
 def add_crown(score, le, re, top_head,frame, crown_image, font_file):
 	middle_ear = measure.find_middle_point(le, re)
 	head_width = measure.two_points_distance(le, re)
