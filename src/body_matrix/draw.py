@@ -238,6 +238,15 @@ def blur_background(segment_area, sample_frame):
 	return sample_frame
 
 
+def pixelate(image, scale_ratio):
+    width = image.width
+    height = image.height
+    scale_down = image.resize(
+        (int(width/scale_ratio),int(height/scale_ratio))
+    )
+    
+    pixelated = scale_down.resize((width, height))
+    return pixelated
 
 # def add_thong(score, lh, rh, frame, font_file):
 # 	return

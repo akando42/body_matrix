@@ -443,6 +443,20 @@ blurImage = draw.blur_background_around_bbox(
 
 ```
 
+Pixelate Image
+```
+from PIL import Image
+from body_matrix import load
+from body_matrix import draw
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Body_Matrixes/samples/man_03.mp4", 
+    -90, 
+    30
+)
+draw.pixelate(sample_frame, 8)
+```
+
 #### Measure
 Box_Center_Coordinate
 ```
