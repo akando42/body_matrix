@@ -122,7 +122,7 @@ def frame_SHA_score(pil_image_frame, bool_mask, selected_kps):
         main_points['right_hip']
     )
        
-    scores, measures = score.SHA_score(
+    scores, measures = SHA_score(
         ls=main_points['left_shoulder'], 
         rs=main_points['right_shoulder'],
         lh=main_points['left_hip'],
