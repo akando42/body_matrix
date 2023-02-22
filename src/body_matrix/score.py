@@ -1,7 +1,8 @@
 import numpy as np
 import seaborn as sns
-from torchvision.transforms.functional import to_pil_image, 
+from torchvision.transforms.functional import to_pil_image, pil_to_tensor
 from . import load, infer, process, measure, draw
+
 
 def two_points_linear_constant(a, b):
     aX = a[0]
@@ -15,6 +16,7 @@ def two_points_linear_constant(a, b):
         alpha = None
         beta = None
     return alpha, beta
+
 
 def find_segment_line(segment_area, alpha, beta):
     line_coordinates = []
