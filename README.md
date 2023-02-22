@@ -10,25 +10,25 @@ $ pip install body-matrix
 Load Segmentation Model to CPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segmentation_model("cpu")
+segmentation_model, segmentation_transforms = load.segment_model("cpu")
 ```
 
 Load Segmentation Model to GPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segmentation_model("cuda")
+segment_model, segment_transforms = load.segment_model("cuda")
 ```
 
 Load Keypoints Model to CPU
 ```
 from body_matrix import load
-keypoints_model, keypoints_transforms = load.segmentation_model("cpu")
+keypoints_model, keypoints_transforms = load.keypoints_model("cpu")
 ```
 
 Load Keypoints Model to GPU
 ```
 from body_matrix import load
-keypoints_model, keypoints_transforms = load.segmentation_model("cuda")
+keypoints_model, keypoints_transforms = load.keypoints_model("cuda")
 ```
 
 Load Video

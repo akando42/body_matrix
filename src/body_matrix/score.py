@@ -1,6 +1,6 @@
 import numpy as np
 import seaborn as sns
-from torchvision.transforms.functional import to_pil_image
+from torchvision.transforms.functional import to_pil_image, 
 from . import load, infer, process, measure, draw
 
 def two_points_linear_constant(a, b):
@@ -16,7 +16,6 @@ def two_points_linear_constant(a, b):
         beta = None
     return alpha, beta
 
-
 def find_segment_line(segment_area, alpha, beta):
     line_coordinates = []
     for idx, position in enumerate(sorted(segment_area)):
@@ -26,6 +25,40 @@ def find_segment_line(segment_area, alpha, beta):
                 [position[0], position[1]]
             )
     return line_coordinates
+
+
+def find_nearest(array, value):
+    np_scores = np.array(array)
+    distance_array = np.abs(np_scores - value)
+    idx = distance_array.argmin()
+    return array[idx], idx
+
+
+def find_largest(array, value):
+    np_scores = np.array(array)
+    distance_array = np.abs(np_scores - value)
+    idx = distance_array.argmax()
+    return array[idx], idx
+
+
+def best_scores(array, min_val, max_val):
+    scores = []
+    for x in array:
+        if x > max_val or x <  min_val:
+            pass
+        else:
+            scores.append(x)
+            
+    np_scores = np.array(scores)
+    mean = np.mean(np_scores)
+    median = np.median(np_scores)
+    minim = np.min(np_scores)
+    maxim = np.max(np_scores)
+    histogram_scores = np.histogram(np_scores)
+    print(mean, median)
+    sns.distplot(np_scores, hist=True)
+    
+    return mean, median, minim, maxim
 
 
 def SHA_score(ls, rs, lh, rh, la, ra):
@@ -45,6 +78,58 @@ def SHA_score(ls, rs, lh, rh, la, ra):
     }
 
     return score, measures
+
+
+def frame_SHA_score(pil_image_frame, bool_mask, selected_kps):
+    image = pil_image_frame
+    segment_area = process.segmentation_area(
+        image, 
+        bool_mask
+    )
+        
+    hip_kps = process.find_hip_points(
+        selected_kps['left_hip'], 
+        selected_kps['right_hip'],
+        selected_kps['left_wrist'],
+        selected_kps['right_wrist'],
+        segment_area
+    )
+        
+    shoulder_kps = process.find_shoulder_points(
+        selected_kps['left_shoulder'], 
+        selected_kps['right_shoulder'],
+        segment_area
+    )
+
+    if hip_kps == None or shoulder_kps == None:
+        print("KEYPOINT ERRORS")
+        return None
+    
+    main_points = {}
+    main_points.update(hip_kps)
+    main_points.update(shoulder_kps)
+    main_points.update(
+        {
+            'left_ankle':selected_kps['left_ankle'],
+            'right_ankle':selected_kps['right_ankle']
+        }
+    )
+    
+    middle_hip = measure.find_middle_point(
+        main_points['left_hip'],
+        main_points['right_hip']
+    )
+       
+    scores, measures = score.SHA_score(
+        ls=main_points['left_shoulder'], 
+        rs=main_points['right_shoulder'],
+        lh=main_points['left_hip'],
+        rh=main_points['right_hip'],
+        la=main_points['left_ankle'],
+        ra=main_points['right_ankle']
+    )
+
+    return scores, measures
 
 
 def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, keypoints_model, keypoints_transform):
@@ -146,40 +231,6 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
         print("##############################")
         
     return SHA_frames, SHA_scores, SHA_measures
-
-
-def find_nearest(array, value):
-	np_scores = np.array(array)
-	distance_array = np.abs(np_scores - value)
-	idx = distance_array.argmin()
-	return array[idx], idx
-
-
-def find_largest(array, value):
-	np_scores = np.array(array)
-	distance_array = np.abs(np_scores - value)
-	idx = distance_array.argmax()
-	return array[idx], idx
-
-
-def best_scores(array, min_val, max_val):
-    scores = []
-    for x in array:
-        if x > max_val or x <  min_val:
-            pass
-        else:
-            scores.append(x)
-            
-    np_scores = np.array(scores)
-    mean = np.mean(np_scores)
-    median = np.median(np_scores)
-    minim = np.min(np_scores)
-    maxim = np.max(np_scores)
-    histogram_scores = np.histogram(np_scores)
-    print(mean, median)
-    sns.distplot(np_scores, hist=True)
-    
-    return mean, median, minim, maxim
 
 
 

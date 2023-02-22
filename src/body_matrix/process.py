@@ -33,6 +33,7 @@ def segmentation_area(sample_image, bool_mask):
 	color = ImageColor.getrgb('blue')
 	tensor_color = torch.tensor(color, dtype=torch.uint8)
 	img_to_draw[:, mask] = tensor_color[:, None]
+	colored = to_pil_image(img_to_draw)
 	x, y = torch.where(
 		(img_to_draw[2] == 255)
 		&(img_to_draw[0] == 0)
@@ -79,7 +80,7 @@ def segmentation_contour(sample_image, bool_mask):
 	color = ImageColor.getrgb('blue')
 	tensor_color = torch.tensor(color, dtype=torch.uint8)
 	img_to_draw[:, mask] = tensor_color[:, None]
-	colored = to_pil_image(img_to_draw)
+	# colored = to_pil_image(img_to_draw)
 	x, y = torch.where(
 		(img_to_draw[2] == 255)
 		&(img_to_draw[0] == 0)

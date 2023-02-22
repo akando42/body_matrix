@@ -192,8 +192,35 @@ def segmentation_contour(contour_pixels, contour_color, contour_size, font,  ima
 	return contoured
 
 
-def segmentation_overlay(segment_area, color):
-	
+# def segmentation_overlay(segment_area, color):
+# 	pass
+
+
+def blur_background_around_bbox(bbox, sample_frame):
+	top_left = (int(bbox[0]), int(bbox[1]))
+	target = sample_frame.crop(bbox)
+	blurImage = sample_frame.filter(ImageFilter.GaussianBlur(10))
+	blurImage.paste(
+		target, 
+		top_left
+	)
+	return blurImage
+
+
+def blur_background(segment_area, sample_frame):
+
+	return sample_frame
+
+
+def pixelate(image, scale_ratio):
+    width = image.width
+    height = image.height
+    scale_down = image.resize(
+        (int(width/scale_ratio),int(height/scale_ratio))
+    )
+    
+    pixelated = scale_down.resize((width, height))
+    return pixelated
 
 
 def add_crown(score, le, re, top_head,frame, crown_image, font_file):
@@ -226,33 +253,7 @@ def add_crown(score, le, re, top_head,frame, crown_image, font_file):
 	return crowned
 
 
-def blur_background_around_bbox(bbox, sample_frame):
-	top_left = (int(bbox[0]), int(bbox[1]))
-	target = sample_frame.crop(bbox)
-	blurImage = sample_frame.filter(ImageFilter.GaussianBlur(10))
-	blurImage.paste(
-		target, 
-		top_left
-	)
-	return blurImage
-
-
-def blur_background(segment_area, sample_frame):
-
-	return sample_frame
-
-
-def pixelate(image, scale_ratio):
-    width = image.width
-    height = image.height
-    scale_down = image.resize(
-        (int(width/scale_ratio),int(height/scale_ratio))
-    )
-    
-    pixelated = scale_down.resize((width, height))
-    return pixelated
-
-# def add_thong(score, lh, rh, frame, font_file):
+#def add_thong(score, lh, rh, frame, font_file):
 # 	return
 
 

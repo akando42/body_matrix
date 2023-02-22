@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: body-matrix
-Version: 0.3.0
+Version: 0.3.2
 Summary: Package to Calculate Human Body Measurements
 Author-email: Hoang Do <hoang.do.2102@gmail.com>
 Project-URL: Homepage, https://github.com/akando42/body_matrix
@@ -24,25 +24,25 @@ $ pip install body-matrix
 Load Segmentation Model to CPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segmentation_model("cpu")
+segmentation_model, segmentation_transforms = load.segment_model("cpu")
 ```
 
 Load Segmentation Model to GPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segmentation_model("cuda")
+segment_model, segment_transforms = load.segment_model("cuda")
 ```
 
 Load Keypoints Model to CPU
 ```
 from body_matrix import load
-keypoints_model, keypoints_transforms = load.segmentation_model("cpu")
+keypoints_model, keypoints_transforms = load.keypoints_model("cpu")
 ```
 
 Load Keypoints Model to GPU
 ```
 from body_matrix import load
-keypoints_model, keypoints_transforms = load.segmentation_model("cuda")
+keypoints_model, keypoints_transforms = load.keypoints_model("cuda")
 ```
 
 Load Video
@@ -455,6 +455,20 @@ blurImage = draw.blur_background_around_bbox(
     sample_frame
 )
 
+```
+
+Pixelate Image
+```
+from PIL import Image
+from body_matrix import load
+from body_matrix import draw
+
+video, frame_counts, fps, sample_frame = load.video(
+    "/Users/troydo42/Desktop/Body_Matrixes/samples/man_03.mp4", 
+    -90, 
+    30
+)
+draw.pixelate(sample_frame, 8)
 ```
 
 #### Measure
