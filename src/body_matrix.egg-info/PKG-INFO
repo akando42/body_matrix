@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: body-matrix
-Version: 0.3.5
+Version: 0.3.6
 Summary: Package to Calculate Human Body Measurements
 Author-email: Hoang Do <hoang.do.2102@gmail.com>
 Project-URL: Homepage, https://github.com/akando42/body_matrix
@@ -24,7 +24,7 @@ $ pip install body-matrix
 Load Segmentation Model to CPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segment_model("cpu")
+segment_model, segment_transforms = load.segment_model("cpu")
 ```
 
 Load Segmentation Model to GPU

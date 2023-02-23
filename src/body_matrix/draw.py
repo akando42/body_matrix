@@ -253,8 +253,35 @@ def add_crown(score, le, re, top_head,frame, crown_image, font_file):
 	return crowned
 
 
-#def add_thong(score, lh, rh, frame, font_file):
-# 	return
+def add_thong(score, lh, rh, frame, font_file):
+	middle_hip = measure.find_middle_point(lh, rh)
+	hip_width = measure.two_points_distance(lh, rh)
+	font_size = int(hip_width/6)
+	font = ImageFont.truetype(font_file, font_size)
+	bottom_hip = (
+		middle_hip[0],
+		middle_hip[1] + int(hip_width/3)
+	)
+	back_side = frame.copy()
+	draw = ImageDraw.Draw(back_side)
+	draw.polygon(
+		[lh, bottom_hip, rh], 
+		fill="#FFFFFF",
+	)
+	text_anchor = (
+		lh[0] + int(hip_width/3),
+		middle_hip[1] + 10
+	)
+
+	draw.text(
+		text_anchor,
+		str(score), 
+		fill="#1C3D90",
+	    font=font,
+	    align="center"
+	)
+
+	return back_side
 
 
 

@@ -10,7 +10,7 @@ $ pip install body-matrix
 Load Segmentation Model to CPU
 ```
 from body_matrix import load
-segmentation_model, segmentation_transforms = load.segment_model("cpu")
+segment_model, segment_transforms = load.segment_model("cpu")
 ```
 
 Load Segmentation Model to GPU
