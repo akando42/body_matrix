@@ -207,9 +207,9 @@ def blur_background_around_bbox(bbox, sample_frame):
 	return blurImage
 
 
-def blur_background(segment_area, sample_frame):
+# def blur_background(segment_area, sample_frame):
 
-	return sample_frame
+# 	return sample_frame
 
 
 def pixelate(image, scale_ratio):
@@ -270,8 +270,10 @@ def add_thong(score, lh, rh, frame, font_file):
 	)
 	text_anchor = (
 		lh[0] + int(hip_width/3),
-		middle_hip[1] + 10
+		middle_hip[1] + int(hip_width/30)
 	)
+
+	print(int(hip_width/20))
 
 	draw.text(
 		text_anchor,
