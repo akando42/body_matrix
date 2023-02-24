@@ -1,6 +1,5 @@
 ## Human Body Measurement via Video and Image
-![Hoang Do Measurements](https://dystillvision.com/images/instameasures_hoangdo.gif)
-![instameasures_hoangdo](https://user-images.githubusercontent.com/1859661/221099305-61ca2447-48e0-4c9c-9461-cd68988e5445.gif)
+[Demo Video](https://www.youtube.com/watch?v=cunkg-qAOss)
 
 ### Install the Package
 ```
@@ -84,5 +83,6 @@ export.generate_instagram_vid(
 )
 
 ```
+![instameasures_hoangdo](https://user-images.githubusercontent.com/1859661/221099305-61ca2447-48e0-4c9c-9461-cd68988e5445.gif)
 
-[Demo Video](https://www.youtube.com/watch?v=cunkg-qAOss)
+
