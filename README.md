@@ -1,4 +1,6 @@
 ## Human Body Measurement via Video and Image
+![Measurements](https://dystillvision.com/images/instameasures_hoangdo.gif])
+
 ### Install the Package
 ```
 $ pip install body-matrix
@@ -81,3 +83,4 @@ export.generate_instagram_vid(
 )
 
 ```
+![Demo Video](https://www.youtube.com/watch?v=cunkg-qAOss)
