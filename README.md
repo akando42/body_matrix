@@ -72,7 +72,7 @@ best_score, frame_index = score.find_nearest(
 
 #### Export Instagram Video with Measures
 export.generate_instagram_vid(
-    vid_name="instameasures_vinmart_girl.mp4", 
+    vid_name="instameasures_hoangdo.mp4", 
     vid_width = sample_frame.width, 
     vid_height = sample_frame.height, 
     pil_images = measure_frames, 
