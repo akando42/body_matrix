@@ -286,4 +286,51 @@ def add_thong(score, lh, rh, frame, font_file):
 	return back_side
 
 
+def visualize_measures(height, leg, hip, shoulder, markers, frame, font_path):
+    height_frame = floating_rectangle_label(
+        image = frame , 
+        longitude_coordinate=markers['chin'][0],
+        point=markers['top_head'],
+        label_text="Height: "+str(int(height))+" cm",
+        label_size=16, 
+        label_color="#ffffff", 
+        label_font=font_path,
+        background_color="#11114A"
+    )
+
+    shoulder_frame = floating_rectangle_label(
+        image = height_frame , 
+        longitude_coordinate=markers['chin'][0],
+        point=markers['right_shoulder'],
+        label_text="Shoulder: "+str(int(shoulder))+" cm",
+        label_size=16, 
+        label_color="#ffffff", 
+        label_font=font_path,
+        background_color="#11114A"
+    )
+
+    hip_frame = floating_rectangle_label(
+        image = shoulder_frame  , 
+        longitude_coordinate=markers['chin'][0],
+        point=markers['left_hip'],
+        label_text="Hip: "+str(int(hip))+" cm",
+        label_size=16, 
+        label_color="#ffffff", 
+        label_font=font_path,
+        background_color="#11114A"
+    )
+
+
+    visualized_frame = floating_rectangle_label(
+        image = hip_frame  , 
+        longitude_coordinate=markers['chin'][0],
+        point=markers['right_ankle'],
+        label_text="Leg: "+str(int(leg))+" cm",
+        label_size=16, 
+        label_color="#ffffff", 
+        label_font=font_path,
+        background_color="#11114A"
+    )
+    
+    return visualized_frame
 

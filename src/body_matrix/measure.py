@@ -1,4 +1,5 @@
 import math
+from . import infer, process
 
 ### Get_Box_Center_Coordinate
 def box_center_coordinate(bbox):
@@ -83,3 +84,142 @@ def find_middle_point(pointA, pointB):
     middleX = (pointA[0] + pointB[0])/2
     middleY = (pointA[1] + pointB[1])/2
     return middleX, middleY 
+
+
+### Find Body Measures
+def find_real_measures(image_frame, device, keypoints_model, keypoints_transform, segment_model, segment_transform):
+    selected_box, keypoints = infer.detect_main_target(
+        image_frame, device, 0.8, keypoints_model, keypoints_transform
+    )
+
+    mask, mask_image, bool_mask = infer.segment_selected_target(
+        image_frame, device, selected_box, 0.99, segment_model, segment_transform
+    )
+
+    selected_kps = process.keypoints_filter(
+        [
+            'left_eye', 'right_eye',
+            'left_ear', 'right_ear',
+            'left_shoulder','right_shoulder',
+            'left_wrist','right_wrist',
+            'left_hip', 'right_hip',
+            'left_ankle', 'right_ankle'
+        ],  
+        keypoints
+    )
+    
+    segment_area = process.segmentation_area(
+        image_frame, 
+        bool_mask
+    )
+    
+    shoulder_point = process.find_shoulder_points(
+        selected_kps['left_shoulder'],
+        selected_kps['right_shoulder'],
+        segment_area
+    )
+    
+    ac_shoulder_line = two_points_distance(
+        shoulder_point['left_shoulder'],
+        shoulder_point['right_shoulder']
+    )
+    
+    hip_kps = process.find_hip_points(
+        selected_kps['left_hip'], 
+        selected_kps['right_hip'],
+        selected_kps['left_wrist'],
+        selected_kps['right_wrist'],
+        segment_area
+    )
+    
+    middle_ear = find_middle_point(
+        selected_kps['left_ear'], 
+        selected_kps['right_ear']
+    )
+
+    middle_hip = find_middle_point(
+        selected_kps['left_hip'],
+        selected_kps['right_hip']
+    )
+
+    hip_line = two_points_distance(
+        hip_kps['left_hip'],
+        hip_kps['right_hip']
+    )
+
+    ear_line = two_points_distance(
+        selected_kps['left_ear'], 
+        selected_kps['right_ear']
+    )
+
+    middle_shoulder = find_middle_point(
+        selected_kps['left_shoulder'], 
+        selected_kps['right_shoulder']
+    )
+
+    shoulder_line = two_points_distance(
+        selected_kps['left_shoulder'], 
+        selected_kps['right_shoulder']
+    )
+
+    middle_ear_shoulder = two_points_distance(
+        middle_ear, 
+        middle_shoulder
+    )
+
+    middle_shoulder_line = two_points_distance(
+        selected_kps['left_shoulder'],
+        selected_kps['right_shoulder']
+    )
+
+    chin_point = (
+        middle_ear[0],
+        middle_ear[1] + middle_ear_shoulder * ear_line /(ear_line + shoulder_line)
+    )
+    
+    segment_contours = process.segmentation_contour(
+        image_frame, 
+        bool_mask
+    )
+
+    top_head = process.find_tophead_point(
+        selected_kps['left_ear'],
+        selected_kps['right_ear'],
+        segment_contours
+    )
+
+    middle_ankle = find_middle_point(
+        selected_kps['left_ankle'],
+        selected_kps['right_ankle']
+    )
+    
+    head_height = two_points_distance(
+        top_head, chin_point
+    )
+
+    body_height = two_points_distance(
+        top_head, middle_ankle
+    )
+
+    leg_height = two_points_distance(
+        middle_hip, middle_ankle
+    )
+    
+    real_height = 22 * body_height/head_height
+    real_legline = 22 * leg_height/head_height
+    real_hipline = 22 * hip_line/head_height
+    real_shoulderline = 22 * ac_shoulder_line/head_height
+    
+    markers = {
+        'top_head': top_head,
+        'chin':chin_point, 
+        'left_shoulder': shoulder_point['left_shoulder'],
+        'right_shoulder': shoulder_point['right_shoulder'],
+        'left_hip':hip_kps['left_hip'],
+        'right_hip':hip_kps['right_hip'],
+        'left_ankle':selected_kps['left_ankle'],
+        'right_ankle':selected_kps['right_ankle'],
+        'central':middle_ankle
+    }
+    
+    return real_height, real_legline, real_hipline, real_shoulderline, markers

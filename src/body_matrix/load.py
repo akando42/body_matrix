@@ -36,7 +36,9 @@ def video(video_path, rotate_angle, frame_position):
 	fps = meta['video_fps']
 	sample_index = frame_position
 	sample_frame = to_pil_image(video[sample_index])
+	sample_index		
 	sample_frame = sample_frame.rotate(rotate_angle, expand=True)
+	
 	return video, frame_counts, fps, sample_frame
 
 
