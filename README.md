@@ -1,5 +1,5 @@
 ## Human Body Measurement via Video and Image
-![Measurements](https://dystillvision.com/images/instameasures_hoangdo.gif])
+![Measurements](https://dystillvision.com/images/instameasures_hoangdo.gif)
 
 ### Install the Package
 ```
