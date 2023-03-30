@@ -3,6 +3,7 @@ from PIL import ImageColor
 from torchvision.transforms.functional import pil_to_tensor, to_pil_image
 from . import score
 from . import measure
+from . import process
 
 # Keypoints_Filter
 def keypoints_filter(selected_kpoints, detected_kpoints):
@@ -280,6 +281,56 @@ def find_tophead_point(le, re, segment_contours):
 	        tophead_pt = (contour_point[0], contour_point[1])
 	        
 	return tophead_pt
+
+
+###############################################
+##### Find Headshot in Keypoint Bounding Box  #
+###############################################
+def find_headshot(pil_video_frame, keypoints, bool_mask):
+    selected_kps = process.keypoints_filter(
+        ['left_ear','right_ear','left_shoulder', 'right_shoulder'], 
+        keypoints
+    )
+    
+    segment_contours = process.segmentation_contour(
+        pil_video_frame, 
+        bool_mask
+    )
+    
+    top_head = process.find_tophead_point(
+        selected_kps['left_ear'],
+        selected_kps['right_ear'],
+        segment_contours
+    )
+    
+    segment_area = process.segmentation_area(
+        pil_video_frame, 
+        bool_mask
+    )
+    
+    shoulder_points = process.find_shoulder_points(
+        selected_kps['left_shoulder'],
+        selected_kps['right_shoulder'],
+        segment_area
+    )
+    
+    left_shoulder = shoulder_points['left_shoulder']
+    right_shoulder = shoulder_points['right_shoulder']
+    middle_shoulder = measure.find_middle_point(left_shoulder, right_shoulder)
+    head_vertical = measure.two_points_distance(top_head, middle_shoulder)
+    top = top_head[1]
+    bottom = middle_shoulder[1]
+    left = middle_shoulder[0] - head_vertical/2  
+    
+    if left > 0:
+        right = left + head_vertical
+    else:
+        left = 0
+        right = head_vertical
+
+    head_position = (left, top, right, bottom)
+    headshot = pil_video_frame.crop(head_position)
+    return headshot
 
 
 
