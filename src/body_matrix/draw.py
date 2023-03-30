@@ -208,7 +208,6 @@ def blur_background_around_bbox(bbox, sample_frame):
 
 
 # def blur_background(segment_area, sample_frame):
-
 # 	return sample_frame
 
 

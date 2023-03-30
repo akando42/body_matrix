@@ -1,3 +1,10 @@
+#### Build and Export
+Change the Version number in pyproject.toml
+```
+$ python -m build 
+$ twine upload dist/*
+```
+
 #### Load Models, Video and Image Frames***
 
 Load Segmentation Model to CPU

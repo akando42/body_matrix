@@ -222,4 +222,4 @@ def find_real_measures(image_frame, device, keypoints_model, keypoints_transform
         'central':middle_ankle
     }
     
-    return real_height, real_legline, real_hipline, real_shoulderline, markers
+    return real_height, real_legline, real_hipline, real_shoulderline, markers, selected_kps

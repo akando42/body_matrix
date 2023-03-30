@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: body-matrix
-Version: 0.4.0
+Version: 0.4.1
 Summary: Package to Calculate Human Body Measurements
 Author-email: Hoang Do <hoang.do.2102@gmail.com>
 Project-URL: Homepage, https://github.com/akando42/body_matrix
@@ -13,6 +13,8 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 
 ## Human Body Measurement via Video and Image
+[Demo Video](https://www.youtube.com/watch?v=cunkg-qAOss)
+
 ### Install the Package
 ```
 $ pip install body-matrix
@@ -84,7 +86,7 @@ best_score, frame_index = score.find_nearest(
 
 #### Export Instagram Video with Measures
 export.generate_instagram_vid(
-    vid_name="instameasures_vinmart_girl.mp4", 
+    vid_name="instameasures_hoangdo.mp4", 
     vid_width = sample_frame.width, 
     vid_height = sample_frame.height, 
     pil_images = measure_frames, 
@@ -95,3 +97,6 @@ export.generate_instagram_vid(
 )
 
 ```
+![instameasures_hoangdo](https://user-images.githubusercontent.com/1859661/221099305-61ca2447-48e0-4c9c-9461-cd68988e5445.gif)
+
+
