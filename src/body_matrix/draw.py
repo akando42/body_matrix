@@ -10,7 +10,7 @@ def keypoint_markers(coordinates, image, label_font):
 		label = str(index) 
 		radius = 6
 
-		print(point)
+		#print(point)
 
 		draw.ellipse(
 			[(point[0]-radius, point[1]-radius), (point[0]+radius, point[1]+radius)],
@@ -272,7 +272,7 @@ def add_thong(score, lh, rh, frame, font_file):
 		middle_hip[1] + int(hip_width/30)
 	)
 
-	print(int(hip_width/20))
+	# print(int(hip_width/20))
 
 	draw.text(
 		text_anchor,

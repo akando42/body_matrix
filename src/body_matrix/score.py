@@ -57,7 +57,7 @@ def best_scores(array, min_val, max_val):
     minim = np.min(np_scores)
     maxim = np.max(np_scores)
     histogram_scores = np.histogram(np_scores)
-    print(mean, median)
+    #print(mean, median)
     sns.distplot(np_scores, hist=True)
     
     return mean, median, minim, maxim
@@ -104,7 +104,7 @@ def frame_SHA_score(pil_image_frame, bool_mask, selected_kps):
     )
 
     if hip_kps == None or shoulder_kps == None:
-        print("KEYPOINT ERRORS")
+        #print("KEYPOINT ERRORS")
         return None
     
     main_points = {}
@@ -181,7 +181,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
         )
 
         if hip_kps == None or shoulder_kps == None:
-            print("KEYPOINT ERRORS")
+            #print("KEYPOINT ERRORS")
             continue
         
         main_points = {}
@@ -201,7 +201,7 @@ def video_SHA_score(vid, device, font_dir,  segment_model, segment_transform, ke
 
         float_labeled_frame = image
         for key, value in main_points.items():
-            print(key, value)
+            #print(key, value)
             float_labeled_frame = draw.floating_rectangle_label(
                 image = float_labeled_frame, 
                 longitude_coordinate = middle_hip[0], 

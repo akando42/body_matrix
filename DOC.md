@@ -1,3 +1,11 @@
+#### TODO
+
+```
+[X] Print only number of people found and height
+[ ] Add Elbow points to the Body_Matrix outputs and Database
+[ ] Add Number of People found in Video to database
+```
+
 #### Build and Export
 Change the Version number in pyproject.toml
 ```

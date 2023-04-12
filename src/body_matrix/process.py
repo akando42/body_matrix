@@ -164,20 +164,20 @@ def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 			'right_hip': hip_line_coordinates[-1]
 		}
 
-		print(
-			"both hand high", hip_kps,
-			"\nLeft: ", lw, lh, 
-			"\nRight: ", rw, rh
-		)
+		# print(
+		# 	"both hand high", hip_kps,
+		# 	"\nLeft: ", lw, lh, 
+		# 	"\nRight: ", rw, rh
+		# )
 		return hip_kps
 
 	elif rw[1] > rh[1] and lw[1] > lh[1]:
 		hip_kps = {}
-		print(
-			"both hand low", hip_kps,
-			"\nLeft hand: ", lw[1], lh[1], 
-			"\nRight: ", rw[1], rh[1]
-		)
+		# print(
+		# 	"both hand low", hip_kps,
+		# 	"\nLeft hand: ", lw[1], lh[1], 
+		# 	"\nRight: ", rw[1], rh[1]
+		# )
 
 	elif int(lw[1]) >= int(lw[0] * hip_alpha + hip_beta)*0.9:
 		precise_rh = hip_line_coordinates[-1]
@@ -188,10 +188,10 @@ def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		print(
-			"low left hand", hip_kps, 
-			"\n Left Wrist", lw,
-			"\n Left Hip: ", lh)
+		# print(
+		# 	"low left hand", hip_kps, 
+		# 	"\n Left Wrist", lw,
+		# 	"\n Left Hip: ", lh)
 		return hip_kps
 		
 		
@@ -205,11 +205,11 @@ def find_hip_points_HLC(lh, rh, lw, rw, segment_area):
 			'left_hip': precise_lh,
 			'right_hip': precise_rh
 		}
-		print(
-			"low right hand", hip_kps,
-			"\n Right Wrist: ", rw,
-			"\n Right Hip: ", rh
-		)
+		# print(
+		# 	"low right hand", hip_kps,
+		# 	"\n Right Wrist: ", rw,
+		# 	"\n Right Hip: ", rh
+		# )
 		return hip_kps
 
 

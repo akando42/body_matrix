@@ -68,14 +68,14 @@ def detect_main_target(frame, device, min_accuracy, kp_model, kp_transforms):
         areas.append(area)
         bboxes.append(bbox)
 
-    print("Distances: ",distances)
-    print("Areas: ", areas)
-    print("FOCUSES: ", focuses)
+    # print("Distances: ",distances)
+    # print("Areas: ", areas)
+    # print("FOCUSES: ", focuses)
 
     distance_score, distance_index = score.find_nearest(distances, 0)
     focus_score, focus_index = score.find_largest(focuses, 0)
     
-    print("Select keypoint index", focus_index)
+    # print("Select keypoint index", focus_index)
     selected_bbox = bboxes[focus_index] 
     selected_keypoints = torch.squeeze(keypoints[idx][focus_index], dim=0)
     # SHApoints = getSHAPositions(kp)
@@ -96,7 +96,7 @@ def segment_selected_target(frame, device, selected_bbox, segment_min_accuracy, 
     idx = torch.where(scores > segment_min_accuracy)
     main_boxes = torch.unsqueeze(boxes[idx], dim=1)
 
-    print("Found ", len(main_boxes), " person in the frame")
+    # print("Found ", len(main_boxes), " person in the frame")
     # index = len(main_boxes) - 1
     
     distances = []
@@ -111,9 +111,9 @@ def segment_selected_target(frame, device, selected_bbox, segment_min_accuracy, 
         distance_from_selected = measure.two_boxes_distance(bbox, selected_bbox)
         distances.append(distance_from_selected)
             
-    print(distances)
+    # print(distances)
     distance, index = score.find_nearest(distances, 0)
-    print(distance, index)
+    # print(distance, index)
     
     mask = torch.squeeze(masks[index][0], dim=1)
     mask_image = to_pil_image(mask)

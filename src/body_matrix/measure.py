@@ -11,8 +11,8 @@ def box_center_coordinate(bbox):
 
 ### Two_Boxes_Distance
 def two_boxes_distance(bbox1, bbox2):
-    print(bbox1)
-    print(bbox2)
+    #print(bbox1)
+    #print(bbox2)
     bbox1_center = box_center_coordinate(bbox1)
     bbox2_center = box_center_coordinate(bbox2)
     x_dif = bbox1_center[0] - bbox2_center[0]
@@ -101,6 +101,7 @@ def find_real_measures(image_frame, device, keypoints_model, keypoints_transform
             'left_eye', 'right_eye',
             'left_ear', 'right_ear',
             'left_shoulder','right_shoulder',
+            'left_elbow', 'right_elbow',
             'left_wrist','right_wrist',
             'left_hip', 'right_hip',
             'left_ankle', 'right_ankle'

@@ -76,7 +76,7 @@ def generate_instagram_vid(vid_name, vid_width, vid_height, pil_images, stop_ind
 	def slow_motion_reverse(pil_images):
 		frames_count = len(pil_images)
 		total_frames = frames_count * 2 * repeat_rate
-		print("Total Frames is ", total_frames)
+		# print("Total Frames is ", total_frames)
 		
 		for idx in range(total_frames):
 			local_index = idx%len(pil_images)
