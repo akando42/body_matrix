@@ -14,7 +14,7 @@ $ pip install body-matrix
 
 from body_matrix import load, infer, process, measure, draw, export
 
-video_path = "/content/drive/MyDrive/Body_Matrix/Raw_Vids/vinmart_customers.mp4"
+video_path = "/content/drive/MyDrive/Body_Matrix/Raw_Vids/walmart_customers.mp4"
 video_rotate = -90
 device = "cuda"
 font_path = "/content/drive/MyDrive/Body_Matrix/Roboto-Bold.ttf"
